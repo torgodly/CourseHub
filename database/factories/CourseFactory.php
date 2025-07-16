@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\CourseStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,7 +28,7 @@ class CourseFactory extends Factory
             'price' => $this->faker->randomFloat(2, 0, 999),
             'is_free' => $this->faker->boolean,
             'is_approved' => $this->faker->boolean,
-            'status' => $this->faker->randomElement(['pending', 'published', 'archived']),
+            'status' => $this->faker->randomElement(CourseStatus::cases()),
         ];
     }
 }

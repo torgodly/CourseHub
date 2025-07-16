@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2)->default(0.00);
             $table->boolean('is_free')->default(false);
             $table->boolean('is_approved')->default(true);
-            $table->enum('status', ['pending', 'published', 'archived'])->default('pending');
+            $table->string('status')->default(\App\Enum\CourseStatus::Draft->value);
             $table->timestamps();
         });
     }

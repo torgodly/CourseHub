@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Enum\CourseStatus;
 use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
 
-class Course extends Model implements HasMedia,ProductInterface
+class Course extends Model implements HasMedia, ProductInterface
 {
     /** @use HasFactory<\Database\Factories\CourseFactory> */
     use HasFactory;
@@ -21,6 +23,12 @@ class Course extends Model implements HasMedia,ProductInterface
 
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'status' => CourseStatus::class,
+        'learn_goals' => 'array',
+        'requirements' => 'array',
+    ];
 
     public function enrollments(): HasMany
     {
@@ -43,5 +51,10 @@ class Course extends Model implements HasMedia,ProductInterface
     public function sections(): HasMany
     {
         return $this->hasMany(Section::class, 'course_id')->orderBy('order');
+    }
+
+    public function trainer(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
