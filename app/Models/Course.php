@@ -39,4 +39,9 @@ class Course extends Model implements HasMedia,ProductInterface
             'description' => 'Purchase access to the course: ' . $this->title,
         ];
     }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(Section::class, 'course_id')->orderBy('order');
+    }
 }

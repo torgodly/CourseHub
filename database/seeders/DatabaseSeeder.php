@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Course;
+use App\Models\Section;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,6 +22,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        Course::factory(2)->create();
+        Course::factory(2)->create()->each(function ($course) {
+            Section::factory(10)->create(['course_id' => $course->id]);
+        });
+
+
     }
 }
