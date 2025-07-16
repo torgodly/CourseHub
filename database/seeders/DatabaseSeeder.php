@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Section;
 use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,10 +22,32 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'admin@admin.com',
+            'type' => 'admin',
         ]);
 
-        Course::factory(2)->create()->each(function ($course) {
+        $trainer = User::factory()->create([
+            'name' => 'Test Trainer',
+            'email' => 'trainer@trainer.com',
+            'type' => 'trainer'
+        ]);
+
+        $users = User::factory(10)->create([
+            'type' => 'user@user.com',
+        ]);
+
+
+        Course::factory(2)->create(
+            [
+                'trainer_id' => $trainer->id,
+            ]
+        )->each(function ($course) use ($users) {
             Section::factory(10)->create(['course_id' => $course->id]);
+            foreach ($users as $user) {
+                Enrollment::factory()->create([
+                    'user_id' => $user->id,
+                    'course_id' => $course->id,
+                ]);
+            }
         });
 
 

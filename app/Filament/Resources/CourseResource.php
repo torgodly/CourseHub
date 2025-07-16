@@ -17,39 +17,12 @@ class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'tabler-book';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Select::make('trainer_id')
-                    ->relationship('trainer', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('learn_goals'),
-                Forms\Components\TextInput::make('requirements'),
-                Forms\Components\TextInput::make('level')
-                    ->required(),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00)
-                    ->prefix('$'),
-                Forms\Components\Toggle::make('is_free')
-                    ->required(),
-                Forms\Components\Toggle::make('is_approved')
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -95,6 +68,14 @@ class CourseResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]),
         ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\SectionsRelationManager::class,
+            RelationManagers\EnrollmentsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
