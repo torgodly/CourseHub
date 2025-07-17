@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CourseResource\Pages;
 use App\Filament\Resources\CourseResource\RelationManagers;
 use App\Models\Course;
+use App\Traits\ResourceTranslatedLabels;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,6 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CourseResource extends Resource
 {
+
+    use ResourceTranslatedLabels;
+
     protected static ?string $model = Course::class;
 
     protected static ?string $navigationIcon = 'tabler-book';

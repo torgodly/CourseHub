@@ -6,6 +6,7 @@ use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Models\Student;
 use App\Models\User;
+use App\Traits\ResourceTranslatedLabels;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StudentResource extends Resource
 {
+    use ResourceTranslatedLabels;
+
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'tabler-school';

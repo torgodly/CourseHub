@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TagResource\Pages;
 use App\Filament\Resources\TagResource\RelationManagers;
+use App\Traits\ResourceTranslatedLabels;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -17,6 +18,8 @@ use Spatie\Tags\Tag;
 
 class TagResource extends Resource
 {
+    use ResourceTranslatedLabels;
+
     protected static ?string $model = Tag::class;
 
     protected static ?string $navigationIcon = 'tabler-tag';
