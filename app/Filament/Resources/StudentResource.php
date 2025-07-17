@@ -24,9 +24,9 @@ class StudentResource extends Resource
     protected static ?string $navigationIcon = 'tabler-school';
 
     protected static ?string $modelLabel = 'Student';
-    protected static ?string $pluralModelLabel = 'Students';
+    protected static ?string $pluralModelLabel = 'الطلاب';
 
-    protected static ?string $navigationGroup = 'Users';
+    protected static ?string $navigationGroup = 'User Management';
 
     public static function form(Form $form): Form
     {
@@ -48,6 +48,7 @@ class StudentResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\ToggleColumn::make('active')
+                    ->translateLabel()
                     ->sortable()
                     ->label('Active'),
                 Tables\Columns\TextColumn::make('enrollments_count')

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
+use App\Traits\ResourceTranslatedLabels;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
@@ -9,11 +10,17 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SectionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'sections';
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Sections');
+    }
 
     public function form(Form $form): Form
     {
@@ -33,6 +40,7 @@ class SectionsRelationManager extends RelationManager
                     ->limit(50)
                     ->toggleable(),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('resources')
+                    ->translateLabel()
                     ->label('Resources')
                     ->conversion('thumb')
                     ->size(50)

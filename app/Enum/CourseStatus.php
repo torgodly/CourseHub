@@ -15,11 +15,11 @@ enum CourseStatus: string implements HasLabel, HasColor, HasIcon
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Draft => 'Draft',
+            self::Draft => __('Draft'),
 //            self::Reviewing => 'Reviewing',
-            self::Published => 'Published',
+            self::Published => __('Published'),
 //            self::Rejected => 'Rejected',
-            self::Archived => 'Archived',
+            self::Archived => __('Archived'),
         };
     }
 

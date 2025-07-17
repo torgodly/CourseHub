@@ -20,23 +20,23 @@ class ViewCourse extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            Section::make('Main Info')->schema([
-               Grid::make()->schema([
-                   TextEntry::make('trainer.name')->label('Trainer'),
-                   TextEntry::make('title')->label('Title'),
-                   TextEntry::make('description')->label('Description')->columnSpanFull(),
-                   TextEntry::make('learn_goals')
-                       ->badge()
-                       ->color('success')
-                       ->label('Learning Goals'),
-                   TextEntry::make('requirements')
-                       ->badge()
-                       ->color('warning')
-                       ->label('Requirements'),
-               ])
+            Section::make(__('Main Info'))->schema([
+                Grid::make()->schema([
+                    TextEntry::make('trainer.name')->label('Trainer'),
+                    TextEntry::make('title')->label('Title'),
+                    TextEntry::make('description')->label('Description')->columnSpanFull(),
+                    TextEntry::make('learn_goals')
+                        ->badge()
+                        ->color('success')
+                        ->label('Learning Goals'),
+                    TextEntry::make('requirements')
+                        ->badge()
+                        ->color('warning')
+                        ->label('Requirements'),
+                ])
 
             ])->columnSpan(2),
-            Section::make('Course Details')->schema([
+            Section::make(__('Course Details'))->schema([
                 Grid::make()->schema([
                     TextEntry::make('level')->label('Level'),
                     TextEntry::make('price')->label('Price'),

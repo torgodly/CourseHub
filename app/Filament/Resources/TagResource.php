@@ -48,6 +48,8 @@ class TagResource extends Resource
                             ->maxLength(255)
                             ->readOnly()
                             ->unique(ignoreRecord: true)
+
+
                     ])
             ]);
     }

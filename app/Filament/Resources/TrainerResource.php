@@ -24,9 +24,9 @@ class TrainerResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $modelLabel = 'Trainer';
-    protected static ?string $pluralModelLabel = 'Trainers';
+    protected static ?string $pluralModelLabel = 'مدربون';
 
-    protected static ?string $navigationGroup = 'Users';
+    protected static ?string $navigationGroup = 'User Management';
 
     public static function form(Form $form): Form
     {
@@ -48,6 +48,7 @@ class TrainerResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\ToggleColumn::make('active')
+                    ->translateLabel()
                     ->sortable()
                     ->label('Active'),
                 Tables\Columns\TextColumn::make('courses_count')

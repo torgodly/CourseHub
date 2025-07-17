@@ -8,11 +8,17 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EnrollmentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'enrollments';
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Enrollments');
+    }
 
     public function form(Form $form): Form
     {
@@ -26,6 +32,7 @@ class EnrollmentsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label("Student")
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')

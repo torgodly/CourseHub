@@ -44,5 +44,13 @@ trait ResourceTranslatedLabels
         return __($heading);
     }
 
+    /**
+     * @return string|null
+     */
+    public static function getNavigationGroup(): ?string
+    {
+        return __(self::$navigationGroup);
+    }
+
 
 }
