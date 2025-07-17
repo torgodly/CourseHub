@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 
 class User extends Authenticatable implements Wallet, Customer
 {
@@ -18,6 +19,7 @@ class User extends Authenticatable implements Wallet, Customer
     use HasFactory, Notifiable;
     use HasWallet;
     use CanPay;
+     use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
