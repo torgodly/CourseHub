@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('profession')->nullable();
             $table->string('resume')->nullable();
             $table->string('type')->default('user'); // 'user', 'trainer', 'admin'
+            $table->boolean('active')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
