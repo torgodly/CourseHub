@@ -39,7 +39,7 @@ class EnrollmentsRelationManager extends RelationManager
                     ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->suffix("د.ل")
                     ->sortable(),
                 Tables\Columns\TextColumn::make('enrolled_at')
                     ->dateTime()

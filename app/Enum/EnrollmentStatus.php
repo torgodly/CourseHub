@@ -15,16 +15,16 @@ enum EnrollmentStatus: string implements HasLabel, HasColor, HasIcon
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Pending => 'Pending',
-            self::Active => 'Active',
-            self::Completed => 'Completed',
+            self::Pending => __('Pending'),
+            self::Active => __('Active'),
+            self::Completed => __('Completed'),
         };
     }
 
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::Pending => 'yellow',
+            self::Pending => 'gray',
             self::Active => 'primary',
             self::Completed => 'success',
         };

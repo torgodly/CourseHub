@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Enum\CourseLevel;
 use App\Enum\CourseStatus;
+use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductInterface;
+use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +16,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
 
-class Course extends Model implements HasMedia, ProductInterface
+class Course extends Model implements HasMedia, ProductLimitedInterface
 {
     /** @use HasFactory<\Database\Factories\CourseFactory> */
     use HasFactory;
@@ -26,6 +29,7 @@ class Course extends Model implements HasMedia, ProductInterface
 
     protected $casts = [
         'status' => CourseStatus::class,
+        'level' => CourseLevel::class,
         'learn_goals' => 'array',
         'requirements' => 'array',
     ];
@@ -57,4 +61,13 @@ class Course extends Model implements HasMedia, ProductInterface
     {
         return $this->belongsTo(User::class);
     }
+
+
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
+    {
+        // Check if the course is available for purchase
+        return !$customer->paid($this);
+    }
+
+
 }

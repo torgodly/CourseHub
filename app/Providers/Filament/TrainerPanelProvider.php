@@ -29,6 +29,7 @@ class TrainerPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->login()
             ->plugin(BreezyCore::make()
                 ->myProfile()
                 ->enableTwoFactorAuthentication())

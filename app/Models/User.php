@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enum\EnrollmentStatus;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Traits\CanPay;
@@ -61,4 +62,15 @@ class User extends Authenticatable implements Wallet, Customer
         return $this->hasMany(Course::class, 'trainer_id');
     }
 
+
+    //enroll in a course
+    public function enroll(Course $course): Enrollment
+    {
+        return $this->enrollments()->create([
+            'course_id' => $course->id,
+            'status' => EnrollmentStatus::Pending->value,
+            'price' => $course->price,
+            'enrolled_at' => now(),
+        ]);
+    }
 }

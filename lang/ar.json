@@ -34,5 +34,12 @@
     "Completed at": "تاريخ الانتهاء",
     "Name": "الاسم",
     "Active": "نشط",
-    "Email": "البريد الإلكتروني"
+    "Email": "البريد الإلكتروني",
+    "Learn goals": "أهداف التعلم",
+    "Beginner": "مبتدئ",
+    "Intermediate": "متوسط",
+    "Advanced": "متقدم",
+    "Pending": "معلق",
+    "Completed": "مكتمل",
+    "Total Revenue": "الإيرادات الإجمالية"
 }

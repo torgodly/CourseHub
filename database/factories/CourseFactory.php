@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\CourseLevel;
 use App\Enum\CourseStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,7 +25,7 @@ class CourseFactory extends Factory
             'description' => $this->faker->paragraph,
             'learn_goals' => json_encode($this->faker->sentences(3)),
             'requirements' => json_encode($this->faker->sentences(2)),
-            'level' => $this->faker->randomElement(['beginner', 'intermediate', 'advanced']),
+            'level' => $this->faker->randomElement(CourseLevel::cases()),
             'price' => $this->faker->randomFloat(2, 0, 999),
             'is_free' => $this->faker->boolean,
             'is_approved' => $this->faker->boolean,

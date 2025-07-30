@@ -39,16 +39,19 @@ class CourseResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('level'),
+                Tables\Columns\TextColumn::make('level')
+                ->badge(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->suffix('د.ل')
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_free')
                     ->boolean(),
                 Tables\Columns\IconColumn::make('is_approved')
                     ->boolean(),
+                Tables\Columns\TextColumn::make('enrollments_count')
+                    ->label('Enrollments')
+                    ->sortable()
+                    ->counts('enrollments'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
                 Tables\Columns\TextColumn::make('created_at')

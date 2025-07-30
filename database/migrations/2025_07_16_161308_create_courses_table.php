@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->json('learn_goals')->nullable();
             $table->json('requirements')->nullable();
-            $table->enum('level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
+            $table->string('level')->default(\App\Enum\CourseLevel::Beginner->value);
             $table->decimal('price', 8, 2)->default(0.00);
             $table->boolean('is_free')->default(false);
             $table->boolean('is_approved')->default(true);

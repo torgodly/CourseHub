@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\CourseResource\Pages;
+namespace App\Filament\Trainer\Resources\CourseResource\Pages;
 
-use App\Filament\Resources\CourseResource;
+use App\Filament\Trainer\Resources\CourseResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -17,6 +16,12 @@ class ViewCourse extends ViewRecord
 {
     protected static string $resource = CourseResource::class;
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\EditAction::make(),
+        ];
+    }
 
     public function infolist(Infolist $infolist): Infolist
     {
@@ -58,12 +63,10 @@ class ViewCourse extends ViewRecord
                     ]),
 
                     TextEntry::make('balance')
-                        ->color('success')
                         ->suffix('د.ل')
                         ->translateLabel()
                         ->badge()
                         ->color('success')
-                        ->color('primary')
                         ->label('Total Revenue'),
                 ]),
                 Section::make(__('Course Details'))->schema([
@@ -84,4 +87,5 @@ class ViewCourse extends ViewRecord
 
         ])->columns(3);
     }
+
 }
