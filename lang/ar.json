@@ -41,5 +41,10 @@
     "Advanced": "متقدم",
     "Pending": "معلق",
     "Completed": "مكتمل",
-    "Total Revenue": "الإيرادات الإجمالية"
+    "Total Revenue": "الإيرادات الإجمالية",
+    "Withdraw to Personal Account": "السحب إلى الحساب الشخصي",
+    "Withdrawal Amount": "مبلغ السحب",
+    "Withdrawal Successful": "تم السحب بنجاح",
+    "Successfully withdrawn :amount to your personal account.": "تم سحب :amount بنجاح إلى حسابك الشخصي.",
+    "You do not have enough funds.": "ليس لديك أموال كافية."
 }

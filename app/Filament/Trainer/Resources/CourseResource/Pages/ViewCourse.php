@@ -4,12 +4,14 @@ namespace App\Filament\Trainer\Resources\CourseResource\Pages;
 
 use App\Filament\Trainer\Resources\CourseResource;
 use Filament\Actions;
+use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewCourse extends ViewRecord
@@ -20,6 +22,36 @@ class ViewCourse extends ViewRecord
     {
         return [
             Actions\EditAction::make(),
+            Actions\Action::make('withdraw')
+                ->label(__('Withdraw to Personal Account'))
+                ->icon('tabler-businessplan')
+                ->form([
+                    TextInput::make('amount')
+                        ->label(__('Withdrawal Amount'))
+                        ->required()
+                        ->numeric()
+                        ->minValue(1)
+                        ->suffix('د.ل')
+                        ->default(fn() => $this->record->wallet->balance)
+                        ->rule(function () {
+                            return function (string $attribute, $value, $fail) {
+                                if ($value > $this->record->wallet->balance) {
+                                    $fail(__('You do not have enough funds.'));
+                                }
+                            };
+                        }),
+
+                ])
+                ->action(function ($data) {
+                    $trainer = $this->record->trainer; // should be a model, not an ID
+                    $this->record->wallet->transfer($trainer->wallet, $data['amount']);
+                    Notification::make()
+                        ->success()
+                        ->title(__('Withdrawal Successful'))
+                        ->body(__('Successfully withdrawn :amount to your personal account.', ['amount' => $data['amount']]))
+                        ->send();
+                })
+                ->requiresConfirmation()
         ];
     }
 
