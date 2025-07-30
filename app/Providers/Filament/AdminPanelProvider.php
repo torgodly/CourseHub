@@ -4,6 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\Widgets\EnrollmentsChart;
 use App\Filament\Widgets\StatsOverview;
+use App\Models\User;
+use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -37,6 +39,11 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+            ])
+            ->plugins([
+                FilamentDeveloperLoginsPlugin::make()
+                    ->enabled()
+                    ->users(fn () => User::pluck('email', 'name')->toArray())
             ])
             ->plugin(BreezyCore::make()
                 ->myProfile()

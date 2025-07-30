@@ -46,5 +46,16 @@
     "Withdrawal Amount": "مبلغ السحب",
     "Withdrawal Successful": "تم السحب بنجاح",
     "Successfully withdrawn :amount to your personal account.": "تم سحب :amount بنجاح إلى حسابك الشخصي.",
-    "You do not have enough funds.": "ليس لديك أموال كافية."
+    "You do not have enough funds.": "ليس لديك أموال كافية.",
+    "Revenue": "الإيرادات",
+    "Revenue Available for Withdraw": "الإيرادات المتاحة للسحب",
+    ":amount د.ل withdrawn from \":course\" to trainer account": ":amount د.ل تم سحبها من \":course\" إلى حساب المدرب",
+    "Purchase access to the course: :course": "شراء الوصول إلى الدورة: :course",
+    "Financial Management": "إدارة مالية",
+    "Wallet Transactions": "معاملات المحفظة",
+    "Wallet Transaction": "معاملة المحفظة",
+    "Wallets": "المحافظ",
+    "Wallet": "المحفظة",
+    "Voucher": "قسيمة",
+    "Vouchers": "قسائم"
 }

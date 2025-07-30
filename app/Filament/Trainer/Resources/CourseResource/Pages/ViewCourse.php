@@ -44,7 +44,11 @@ class ViewCourse extends ViewRecord
                 ])
                 ->action(function ($data) {
                     $trainer = $this->record->trainer; // should be a model, not an ID
-                    $this->record->wallet->transfer($trainer->wallet, $data['amount']);
+                    $meta = [__(':amount د.ل withdrawn from ":course" to trainer account', [
+                        'amount' => number_format($data['amount'], 2),
+                        'course' => $this->record->title,
+                    ])];
+                    $this->record->wallet->transfer($trainer->wallet, $data['amount'], $meta);
                     Notification::make()
                         ->success()
                         ->title(__('Withdrawal Successful'))

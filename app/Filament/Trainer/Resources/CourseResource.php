@@ -42,7 +42,7 @@ class CourseResource extends Resource
                                             ->required(),
 
                                         Forms\Components\TextInput::make('trainer')
-                                            ->default(fn () => auth()->user()?->name)
+                                            ->default(fn() => auth()->user()?->name)
                                             ->readOnly(),
 
                                         Forms\Components\TextInput::make('title')
@@ -111,7 +111,17 @@ class CourseResource extends Resource
                 Tables\Columns\TextColumn::make('level')
                     ->badge(),
                 Tables\Columns\TextColumn::make('price')
+                    ->badge()
+                    ->color('success')
                     ->suffix('د.ل')
+                    ->sortable(),
+                //الايرادات المتاحه
+                Tables\Columns\TextColumn::make('wallet.balance')
+                    ->label('Revenue')
+                    ->badge()
+                    ->suffix('د.ل')
+                    ->color('success')
+                    ->description(__('Revenue Available for Withdraw'))
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_free')
                     ->boolean(),
@@ -164,5 +174,10 @@ class CourseResource extends Resource
             'view' => Pages\ViewCourse::route('/{record}'),
             'edit' => Pages\EditCourse::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('trainer_id', auth()->user()->id);
     }
 }

@@ -8,19 +8,44 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Traits\CanPay;
 use Bavix\Wallet\Traits\HasWallet;
+use Cassandra\Type\UserType;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 
-class User extends Authenticatable implements Wallet, Customer
+class User extends Authenticatable implements Wallet, Customer, FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
     use HasWallet;
     use CanPay;
-     use TwoFactorAuthenticatable;
+    use TwoFactorAuthenticatable;
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        //based on type and the panel id
+        return match ($panel->getId()) {
+            'admin' => $this->is_admin,
+            'trainer' => $this->is_trainer,
+            default => false,
+        };
+    }
+
+    //is_admin
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->type === 'admin';
+    }
+
+    //is_trainer
+    public function getIsTrainerAttribute(): bool
+    {
+        return $this->type === 'trainer';
+    }
 
     /**
      * The attributes that are mass assignable.

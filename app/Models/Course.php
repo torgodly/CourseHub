@@ -46,10 +46,7 @@ class Course extends Model implements HasMedia, ProductLimitedInterface
 
     public function getMetaProduct(): ?array
     {
-        return [
-            'title' => 'Course: ' . $this->title,
-            'description' => 'Purchase access to the course: ' . $this->title,
-        ];
+        return [__('Purchase access to the course: :course', ['course' => $this->title])];
     }
 
     public function sections(): HasMany

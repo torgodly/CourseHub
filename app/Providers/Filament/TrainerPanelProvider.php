@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\User;
+use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -30,6 +32,11 @@ class TrainerPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->login()
+            ->plugins([
+                FilamentDeveloperLoginsPlugin::make()
+                    ->enabled()
+                    ->users(fn () => User::pluck('email', 'name')->toArray())
+            ])
             ->plugin(BreezyCore::make()
                 ->myProfile()
                 ->enableTwoFactorAuthentication())
