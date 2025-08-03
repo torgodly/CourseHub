@@ -58,17 +58,25 @@ class SectionsRelationManager extends RelationManager
                             ->maxLength(1000)
                             ->rows(3)
                             ->columnSpanFull(),
-                      Forms\Components\Grid::make()
-                        ->schema([
-                            SpatieMediaLibraryFileUpload::make('thumb')
-                                ->collection('resources_thumb')
-                                ->label(__('Thumbnail'))
-                                ->image()
-                                ->required(),
-                            Forms\Components\SpatieMediaLibraryFileUpload::make('resources')
-                                ->collection('resources')
-                                ->label(__('Resources'))
-                        ])
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                SpatieMediaLibraryFileUpload::make('thumb')
+                                    ->collection('resources_thumb')
+                                    ->label(__('Thumbnail'))
+                                    ->image()
+                                    ->columnSpanFull()
+                                    ->required(),
+                                SpatieMediaLibraryFileUpload::make('video')
+                                    ->collection('resources_video')
+                                    ->label(__('Video'))
+                                    ->required()
+                                    ->acceptedFileTypes(['video/mp4', 'video/webm']),
+                                Forms\Components\SpatieMediaLibraryFileUpload::make('resources')
+                                    ->collection('resources')
+                                    ->label(__('Resources'))
+                                    ->multiple()
+                                    ->maxFiles(10)
+                            ])
                     ])
             ]);
     }

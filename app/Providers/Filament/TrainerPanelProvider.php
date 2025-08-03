@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Trainer\Widgets\StatOverview;
 use App\Models\User;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -29,13 +30,17 @@ class TrainerPanelProvider extends PanelProvider
             ->id('trainer')
             ->path('trainer')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#fa532e'),
+
             ])
+            ->brandLogo(asset('logo/red-logo.png'))
+            ->darkModeBrandLogo(asset('logo/white-logo.png'))
+            ->brandLogoHeight('4rem')
             ->login()
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled()
-                    ->users(fn () => User::pluck('email', 'name')->toArray())
+                    ->users(fn() => User::pluck('email', 'name')->toArray())
             ])
             ->plugin(BreezyCore::make()
                 ->myProfile()
@@ -47,8 +52,7 @@ class TrainerPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Trainer/Widgets'), for: 'App\\Filament\\Trainer\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                StatOverview::class
             ])
             ->middleware([
                 EncryptCookies::class,

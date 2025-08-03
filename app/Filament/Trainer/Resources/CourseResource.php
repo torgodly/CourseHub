@@ -33,8 +33,9 @@ class CourseResource extends Resource
     {
         return $form
             ->schema([
-                    Forms\Components\Section::make('Basic Info')
-                        ->schema([
+                    Forms\Components\Group::make()->schema([
+                        Forms\Components\Section::make('Basic Info')
+                            ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
                                         Forms\Components\Hidden::make('trainer_id')
@@ -74,30 +75,52 @@ class CourseResource extends Resource
                                 Forms\Components\Textarea::make('description')
                                     ->translateLabel()
                                     ->columnSpanFull(),
-                            ]
-                        )->columnSpan(2),
+                            ])
+                    ])->columnSpan(2),
+                    Forms\Components\Group::make()->schema([
+                        Forms\Components\Section::make('Pricing & Settings')
+                            ->schema([
+                                Forms\Components\Grid::make(2)
+                                    ->schema([
+                                        Forms\Components\TextInput::make('price')
+                                            ->disabled(fn($get) => $get('is_free') === true)
+                                            ->required()
+                                            ->numeric()
+                                            ->default(0.00)
+                                            ->prefix('$'),
+                                        Forms\Components\Select::make('status')
+                                            ->translateLabel()
+                                            ->options(CourseStatus::class)
+                                            ->default(CourseStatus::Draft->value)
+                                            ->required()
+                                        ,
+                                        Forms\Components\Toggle::make('is_free')
+                                            ->live()
+                                            ->required(),
+                                    ]),
 
-                    Forms\Components\Section::make('Pricing & Settings')
-                        ->schema([
-                            Forms\Components\Grid::make(2)
-                                ->schema([
-                                    Forms\Components\TextInput::make('price')
-                                        ->disabled(fn($get) => $get('is_free') === true)
-                                        ->required()
-                                        ->numeric()
-                                        ->default(0.00)
-                                        ->prefix('$'),
-                                    Forms\Components\Select::make('status')
-                                        ->translateLabel()
-                                        ->options(CourseStatus::class)
-                                        ->default(CourseStatus::Draft->value)
-                                        ->required()
-                                    ,
-                                    Forms\Components\Toggle::make('is_free')
-                                        ->live()
-                                        ->required(),
-                                ]),
-                        ])->columnSpan(1),
+                                //بنسألك باش مهندس صورة غلاف رئيسية لدورة موجودة يلي بتطلع في صفحة رئيسية في منصة وكذلك فيديو ترويجي واختيار فئة لدورة حتى هي موجودة ؟
+                            ]),
+                        //بنسألك باش مهندس صورة غلاف رئيسية لدورة موجودة يلي بتطلع في صفحة رئيسية في منصة وكذلك فيديو ترويجي واختيار فئة لدورة حتى هي موجودة ؟
+                        Forms\Components\Section::make('Media')
+                            ->schema([
+                                Forms\Components\SpatieTagsInput::make('categroy'),
+                                Forms\Components\FileUpload::make('thumbnail')
+                                    ->translateLabel()
+                                    ->image()
+                                    ->required()
+                                    ->maxSize(1024)
+                                    ->columnSpanFull(),
+                                Forms\Components\FileUpload::make('video')
+                                    ->translateLabel()
+                                    ->acceptedFileTypes(['video/mp4'])
+                                    ->required()
+                                    ->maxSize(10240)
+                                    ->columnSpanFull(),
+                            ]),
+                    ])->columnSpan(1),
+
+
                 ]
             )->columns(3);
     }
@@ -120,7 +143,7 @@ class CourseResource extends Resource
                     ->label('Revenue')
                     ->badge()
                     ->suffix('د.ل')
-                    ->color('success')
+                    ->color(fn($state) => $state <= 0 ? 'danger' : 'success')
                     ->description(__('Revenue Available for Withdraw'))
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_free')
@@ -134,7 +157,6 @@ class CourseResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->searchable(),
-
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

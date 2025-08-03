@@ -29,6 +29,11 @@ class StatsOverview extends BaseWidget
                 ->color('warning')
                 ->icon('heroicon-o-check-circle')
                 ->chart(['200', '240', '220', '260', '250', '280', '270']),
+
+            Stat::make('إجمالي الإيرادات', auth()->user()->wallet->balance)
+                ->color('success')
+                ->icon('heroicon-o-currency-dollar')
+                ->chart(['300', '400', '350', '450', '500', '550', '600']),
         ]
             ;
     }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->decimal('amount', 10, 2);
             $table->string('description')->nullable();
-            $table->date('expires_at')->nullable();
+            $table->date('redeemed_at')->nullable();
             $table->timestamps();
         });
     }

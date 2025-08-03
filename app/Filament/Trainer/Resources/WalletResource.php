@@ -21,9 +21,6 @@ class WalletResource extends Resource
 
     protected static ?string $model = Transaction::class;
 
-    protected static ?string $modelLabel = 'Wallet Transactions';
-
-    protected static ?string $pluralModelLabel = 'Wallet Transactions';
     protected static ?string $navigationIcon = 'tabler-wallet';
 
     protected static ?string $navigationGroup = 'Financial Management';
@@ -100,5 +97,7 @@ class WalletResource extends Resource
             'index' => Pages\ManageWallets::route('/'),
         ];
     }
+
+
 
 }

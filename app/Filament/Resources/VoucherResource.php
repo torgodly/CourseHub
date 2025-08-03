@@ -72,11 +72,11 @@ class VoucherResource extends Resource
                     ->suffix('د.ل')
                     ->label(__('amount')),
 
-                Tables\Columns\TextColumn::make('expires_at')
+                Tables\Columns\TextColumn::make('redeemed_at')
                     ->date()
                     ->sortable()
                     ->placeholder(__('has not been used yet'))
-                    ->label(__('expires at')),
+                    ->label(__('redeemed at')),
                 Tables\Columns\TextColumn::make('description')
                     ->limit(50)
                     ->placeholder(__('N\A'))

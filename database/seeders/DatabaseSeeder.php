@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $users = User::factory(10)->create([
-            'type' => 'user@user.com',
+            'type' => 'user',
         ]);
 
 

@@ -81,9 +81,9 @@ class WalletResource extends Resource
     {
         return [
             'index' => Pages\ListWallets::route('/'),
-            'create' => Pages\CreateWallet::route('/create'),
+//            'create' => Pages\CreateWallet::route('/create'),
             'view' => Pages\ViewWallet::route('/{record}'),
-            'edit' => Pages\EditWallet::route('/{record}/edit'),
+//            'edit' => Pages\EditWallet::route('/{record}/edit'),
         ];
     }
 }

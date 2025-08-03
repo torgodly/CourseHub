@@ -23,7 +23,10 @@ class ViewCourse extends ViewRecord
         return [
             Actions\EditAction::make(),
             Actions\Action::make('withdraw')
+                ->requiresConfirmation()
                 ->label(__('Withdraw to Personal Account'))
+                ->modalHeading(__('Withdraw to Personal Account'))
+                ->modalDescription(__('30% will be deducted as a service fee.'))
                 ->icon('tabler-businessplan')
                 ->form([
                     TextInput::make('amount')
@@ -49,13 +52,21 @@ class ViewCourse extends ViewRecord
                         'course' => $this->record->title,
                     ])];
                     $this->record->wallet->transfer($trainer->wallet, $data['amount'], $meta);
+                    //deduct service fee and put them in the admin wallet
+                    $serviceFee = $data['amount'] * 0.3; // 30% service fee
+                    $adminWallet = \App\Models\User::where('is_admin', true)->first()->wallet;
+                    $this->record->wallet->transfer($adminWallet, $serviceFee, [
+                        __('Service fee of :amount for ":course"', [
+                            'amount' => number_format($serviceFee, 2),
+                            'course' => $this->record->title,
+                        ]),
+                    ]);
                     Notification::make()
                         ->success()
                         ->title(__('Withdrawal Successful'))
                         ->body(__('Successfully withdrawn :amount to your personal account.', ['amount' => $data['amount']]))
                         ->send();
-                })
-                ->requiresConfirmation()
+                })->disabled(fn() => $this->record->wallet->balance <= 0)
         ];
     }
 
