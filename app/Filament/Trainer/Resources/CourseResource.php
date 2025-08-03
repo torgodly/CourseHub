@@ -87,7 +87,7 @@ class CourseResource extends Resource
                                             ->required()
                                             ->numeric()
                                             ->default(0.00)
-                                            ->prefix('$'),
+                                            ->prefix('د.ل'),
                                         Forms\Components\Select::make('status')
                                             ->translateLabel()
                                             ->options(CourseStatus::class)
