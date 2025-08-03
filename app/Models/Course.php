@@ -66,5 +66,25 @@ class Course extends Model implements HasMedia, ProductLimitedInterface
         return !$customer->paid($this);
     }
 
+    public function getThumbnailsAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl('thumbnails');
+    }
+
+    public function getPromotionalVideosAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl('promotional_videos');
+    }
+
+    public function ratings()
+    {
+        return $this->belongsToMany(User::class, 'course_user_ratings')->withPivot('rating')->withTimestamps();
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return round($this->ratings()->avg('course_user_ratings.rating'), 1);
+    }
+
 
 }

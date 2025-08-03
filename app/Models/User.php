@@ -98,4 +98,21 @@ class User extends Authenticatable implements Wallet, Customer, FilamentUser
             'enrolled_at' => now(),
         ]);
     }
+
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Course::class, 'course_user_favorites');
+    }
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'course_user_favorites');
+    }
+
+    public function ratedCourses()
+    {
+        return $this->belongsToMany(Course::class, 'course_user_ratings')->withPivot('rating')->withTimestamps();
+    }
+
+
 }

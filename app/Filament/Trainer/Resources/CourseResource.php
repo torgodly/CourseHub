@@ -99,9 +99,7 @@ class CourseResource extends Resource
                                             ->required(),
                                     ]),
 
-                                //بنسألك باش مهندس صورة غلاف رئيسية لدورة موجودة يلي بتطلع في صفحة رئيسية في منصة وكذلك فيديو ترويجي واختيار فئة لدورة حتى هي موجودة ؟
                             ]),
-                        //بنسألك باش مهندس صورة غلاف رئيسية لدورة موجودة يلي بتطلع في صفحة رئيسية في منصة وكذلك فيديو ترويجي واختيار فئة لدورة حتى هي موجودة ؟
                         Forms\Components\Section::make('Media')
                             ->schema([
                                 Forms\Components\Select::make('tags')
@@ -116,7 +114,7 @@ class CourseResource extends Resource
                                     ->maxSize(1024)
                                     ->columnSpanFull(),
                                 Forms\Components\SpatieMediaLibraryFileUpload::make('video')
-                                    ->collection('videos')
+                                    ->collection('promotional_videos')
                                     ->translateLabel()
                                     ->acceptedFileTypes(['video/mp4'])
                                     ->required()
