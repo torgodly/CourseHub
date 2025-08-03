@@ -14,9 +14,10 @@ class Voucher extends Model
         return $this->redeemed_at !== null;
     }
 
-    public function redeem(): void
+    public function redeem($user): void
     {
-        auth()->user()->wallet->deposit($this->amount, [__('Voucher Redeem') . $this->code]);
+        $user = $user ?? auth()->user();
+        $user->wallet->deposit($this->amount, [__('Voucher Redeem') . $this->code]);
         $this->redeemed_at = now();
         $this->save();
     }
