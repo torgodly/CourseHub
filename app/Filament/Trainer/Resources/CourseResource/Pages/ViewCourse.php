@@ -2,6 +2,7 @@
 
 namespace App\Filament\Trainer\Resources\CourseResource\Pages;
 
+use App\Enum\EnrollmentStatus;
 use App\Filament\Trainer\Resources\CourseResource;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
@@ -91,19 +92,29 @@ class ViewCourse extends ViewRecord
 
             ])->columnSpan(2),
             Group::make()->schema([
-                Section::make('Enrollments')->schema([
-                    Grid::make(3)->schema([
+                Section::make(__('Enrollments'))->schema([
+                    Grid::make(4)->schema([
                         TextEntry::make('enrollments_count')
+                            ->state(fn ($record) => $record->enrollments->count())
                             ->translateLabel()
                             ->badge()
                             ->label('Enrollments'),
                         TextEntry::make('enrollments_pending_count')
                             ->translateLabel()
+                            ->state(fn ($record) => $record->enrollments->where('status', EnrollmentStatus::Pending->value)->count())
                             ->badge()
                             ->color('warning')
                             ->label('Pending'),
+                        //active
+                        TextEntry::make('enrollments_active_count')
+                            ->translateLabel()
+                            ->state(fn ($record) => $record->enrollments->where('status', EnrollmentStatus::Active->value)->count())
+                            ->badge()
+                            ->color('blue')
+                            ->label('Active'),
                         TextEntry::make('enrollments_completed_count')
                             ->translateLabel()
+                            ->state(fn ($record) => $record->enrollments->where('status', EnrollmentStatus::Completed->value)->count())
                             ->badge()
                             ->color('success')
                             ->label('Completed'),

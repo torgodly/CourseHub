@@ -104,14 +104,19 @@ class CourseResource extends Resource
                         //بنسألك باش مهندس صورة غلاف رئيسية لدورة موجودة يلي بتطلع في صفحة رئيسية في منصة وكذلك فيديو ترويجي واختيار فئة لدورة حتى هي موجودة ؟
                         Forms\Components\Section::make('Media')
                             ->schema([
-                                Forms\Components\SpatieTagsInput::make('categroy'),
-                                Forms\Components\FileUpload::make('thumbnail')
+                                Forms\Components\Select::make('tags')
+                                    ->multiple()
+                                    ->preload()
+                                    ->relationship('tags', 'name'),
+                                Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')
+                                    ->collection('thumbnails')
                                     ->translateLabel()
                                     ->image()
                                     ->required()
                                     ->maxSize(1024)
                                     ->columnSpanFull(),
-                                Forms\Components\FileUpload::make('video')
+                                Forms\Components\SpatieMediaLibraryFileUpload::make('video')
+                                    ->collection('videos')
                                     ->translateLabel()
                                     ->acceptedFileTypes(['video/mp4'])
                                     ->required()

@@ -31,7 +31,7 @@ class TrainerPanelProvider extends PanelProvider
             ->path('trainer')
             ->colors([
                 'primary' => Color::hex('#fa532e'),
-
+                'blue' => Color::Blue,
             ])
             ->brandLogo(asset('logo/red-logo.png'))
             ->darkModeBrandLogo(asset('logo/white-logo.png'))
