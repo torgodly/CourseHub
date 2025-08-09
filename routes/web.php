@@ -11,7 +11,7 @@ use App\Http\Controllers\PurchasedCourseController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\WalletController;
 
-Route::view('/', 'welcome');
+Route::get('/', [CourseController::class, 'index'])->name('welcome');
 
 // Auth
 Route::middleware('guest')->group(function () {
