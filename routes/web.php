@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomePageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\UserController;
@@ -11,7 +12,8 @@ use App\Http\Controllers\PurchasedCourseController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\WalletController;
 
-Route::get('/', [CourseController::class, 'index'])->name('welcome');
+
+Route::get('/', [HomePageController::class, 'index'])->name('welcome');
 
 // Auth
 Route::middleware('guest')->group(function () {
