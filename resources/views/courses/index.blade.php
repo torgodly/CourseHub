@@ -19,53 +19,11 @@
         <x-course-filters/>
 
         {{-- Courses Grid --}}
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @foreach($courses as $course)
                 <x-course-card :$course/>
             @endforeach
 
-
-            {{--            <x-course-card--}}
-            {{--                image="https://placehold.co/600x400/000000/FFF"--}}
-            {{--                tag="Prototyping"--}}
-            {{--                title="تصميم النماذج التفاعلية باستخدام Figma"--}}
-            {{--                description="بناء نماذج تفاعلية عالية الجودة باستخدام أداة Figma."--}}
-            {{--                students="+1.5K"--}}
-            {{--                weeks="8"--}}
-            {{--                lessons="25"--}}
-            {{--                rating="4.5"--}}
-            {{--                price="310"--}}
-            {{--                instructor="إيهاب فايز"--}}
-            {{--                instructorImage="/images/instructor2.jpg"--}}
-            {{--            />--}}
-
-            {{--            <x-course-card--}}
-            {{--                image="https://placehold.co/600x400/000000/FFF"--}}
-            {{--                tag="UX Fundamentals"--}}
-            {{--                title="أساسيات تصميم تجربة المستخدم"--}}
-            {{--                description="مقدمة شاملة لتصميم تجربة المستخدم."--}}
-            {{--                students="+1.1K"--}}
-            {{--                weeks="7"--}}
-            {{--                lessons="15"--}}
-            {{--                rating="4.1"--}}
-            {{--                price="400"--}}
-            {{--                instructor="م. أحمد الصواري"--}}
-            {{--                instructorImage="/images/instructor3.jpg"--}}
-            {{--            />--}}
-
-            {{--            <x-course-card--}}
-            {{--                image="https://placehold.co/600x400/000000/FFF"--}}
-            {{--                tag="UX Fundamentals"--}}
-            {{--                title="أساسيات تصميم تجربة المستخدم"--}}
-            {{--                description="مقدمة شاملة لتصميم تجربة المستخدم."--}}
-            {{--                students="+1.1K"--}}
-            {{--                weeks="7"--}}
-            {{--                lessons="15"--}}
-            {{--                rating="4.1"--}}
-            {{--                price="400"--}}
-            {{--                instructor="م. أحمد الصواري"--}}
-            {{--                instructorImage="/images/instructor3.jpg"--}}
-            {{--            />--}}
         </div>
 
     </div>
