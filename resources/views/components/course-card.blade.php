@@ -48,10 +48,10 @@
         {{-- Price & Button --}}
         <button
             class="flex items-center justify-center w-[85%] mx-auto mt-auto rounded bg-orange-500 hover:bg-orange-600 font-bold text-white">
-            <div class="text-sm pl-3 py-2">
+            <span class="text-sm pl-3 py-2">
                 أضف إلى السلة
-            </div>
-            <div class="px-2">|</div>
+            </span>
+            <span class="px-2">|</span>
             <span class="text-lg mr-1">
                 {{ $course->price ?? '0' }} د.ل
             </span>
