@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
@@ -9,7 +10,9 @@ class FavoriteController extends Controller
     //
     public function index()
     {
-        $favorites = auth()->user()->favorites()->with('course')->get();
+        $favorites = Course::whereHas('favorites', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->get();
 
         return view('favorites.index', compact('favorites'));
     }
