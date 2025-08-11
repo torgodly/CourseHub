@@ -6,7 +6,7 @@
 
 <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 flex flex-col">
     {{-- Course Image --}}
-    <img src="{{ $course->image ?? 'https://placehold.co/600x400/000000/FFF' }}"
+    <img src="{{ asset($course->thumbnails) ?? 'https://placehold.co/600x400/000000/FFF' }}"
          alt="{{ $course->title }}"
          class="w-full h-48 object-cover">
 
