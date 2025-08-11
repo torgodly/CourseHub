@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Course::factory(2)->create(
+        Course::factory(10)->create(
             [
                 'trainer_id' => $trainer->id,
             ]

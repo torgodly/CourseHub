@@ -28,7 +28,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 // Courses
 Route::prefix('courses')->name('courses.')->group(function () {
     Route::get('/', [CourseController::class, 'index'])->name('index');
-    Route::get('{course}', [CourseController::class, 'show'])->name('show');
+    Route::get('{course:slug}', [CourseController::class, 'show'])->name('show');
     Route::post('{course}/buy', [CourseController::class, 'purchase'])->name('purchase');
     Route::post('{course}/enroll', [CourseController::class, 'enroll'])->name('enroll');
     Route::get('{course}/sections/{section}', [CourseController::class, 'showSection'])->name('sections.show');

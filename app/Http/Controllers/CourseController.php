@@ -12,10 +12,37 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::all();
-        return view('courses.index', compact('courses'));
+        $tab = $request->get('tab', 'all'); // default: all
+
+        $query = Course::query()->with('trainer');
+
+        switch ($tab) {
+            case 'new':
+                $query->orderBy('created_at', 'desc');
+                break;
+
+            case 'popular':
+                $query->orderBy('created_at', 'asc'); // or 'students_count' if you track that
+                break;
+
+            case 'specialties':
+                $query->whereNotNull('level'); // example condition
+                break;
+
+            case 'all':
+            default:
+                // no extra filtering
+                break;
+        }
+
+        $courses = $query->get();
+
+        return view('courses.index', [
+            'courses' => $courses,
+            'active' => $tab,
+        ]);
     }
 
     /**
