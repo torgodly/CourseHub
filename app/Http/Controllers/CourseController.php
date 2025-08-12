@@ -16,19 +16,20 @@ class CourseController extends Controller
     {
         $tab = $request->get('tab', 'all'); // default: all
 
+
         $query = Course::query()->with('trainer');
 
         switch ($tab) {
             case 'new':
-                $query->orderBy('created_at', 'desc');
+                $query = $query->orderBy('created_at', 'desc');
                 break;
 
             case 'popular':
-                $query->orderBy('created_at', 'asc'); // or 'students_count' if you track that
+                $query = $query->orderBy('created_at', 'asc'); // or 'students_count' if you track that
                 break;
 
             case 'specialties':
-                $query->whereNotNull('level'); // example condition
+                $query = $query->whereNotNull('level'); // example condition
                 break;
 
             case 'all':
@@ -37,7 +38,7 @@ class CourseController extends Controller
                 break;
         }
 
-        $courses = $query->get();
+        $courses = $query->paginate(6);
 
         return view('courses.index', [
             'courses' => $courses,

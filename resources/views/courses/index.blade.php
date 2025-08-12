@@ -26,6 +26,8 @@
 
         </div>
 
+        <div class="mt-6">{{$courses->links()}}</div>
+
     </div>
 
 @endsection

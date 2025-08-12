@@ -14,7 +14,7 @@
         @endphp
 
         @foreach ($tabs as $key => $label)
-            <a href="?tab={{ $key }}"
+            <a href="{{ route('courses.index', ['tab' => $key]) }}"
                class="pb-2 border-b-2 transition-colors duration-200
    {{ $active === $key ? 'border-orange-500 text-orange-500 font-bold' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
                 {{ $label }}
