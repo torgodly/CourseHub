@@ -15,8 +15,8 @@
 
         @foreach ($tabs as $key => $label)
             <a href="{{ route('courses.index', ['tab' => $key]) }}"
-               class="pb-2 border-b-2 transition-colors duration-200
-   {{ $active === $key ? 'border-orange-500 text-orange-500 font-bold' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+                class="pb-2 border-b-2 transition-colors duration-200
+   {{ $active === $key ? 'border-primary-orange text-primary-orange font-bold' : 'border-transparent text-neutral-gray hover:text-gray-900' }}">
                 {{ $label }}
             </a>
         @endforeach
@@ -34,9 +34,9 @@
         <button
             class="border rounded-xl px-3 py-1 text-sm font-bold text-gray-800 border-gray-400 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                 stroke="currentColor">
+                stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V20a1 1 0 01-1.447.894l-4-2A1 1 0 018 18v-4.586L3.293 6.707A1 1 0 013 6V4z"/>
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V20a1 1 0 01-1.447.894l-4-2A1 1 0 018 18v-4.586L3.293 6.707A1 1 0 013 6V4z" />
             </svg>
             الفلترة
         </button>
