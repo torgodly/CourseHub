@@ -30,8 +30,11 @@
                 @endforeach
             </div>
 
-            <div class="pt-8">
-                <a href="" />
+            <div class="text-center mt-8">
+                <a href="{{ route('courses.index') }}"
+                    class="inline-block px-6 py-2 bg-primary-orange hover:bg-secondary-orange text-white text-lg rounded-md font-bold">
+                    عرض جميع الدورات
+                </a>
             </div>
 
         </div>
