@@ -117,6 +117,7 @@ class CourseController extends Controller
      */
     public function toggleFavorite(Request $request, Course $course)
     {
+
         $user = auth()->user();
 
         if ($user->favorites()->toggle($course->id)) {

@@ -8,10 +8,10 @@
     </div>
 
     {{-- Course Hero Section --}}
-    <div class="flex justify-between items-start mx-auto p-6 bg-white shadow-lg rounded-lg mb-8">
+    <div class="lg:flex justify-between items-start mx-auto p-6 bg-white shadow-lg rounded-lg mb-8">
 
         {{-- Course Details --}}
-        <div class="w-3/4">
+        <div class="lg:w-3/4">
             <div>
                 <h1 class="text-4xl font-bold text-primary-orange">The complete advanced 6-week UI/UX design bootcamp</h1>
                 <div class="flex items-center text-gray-500 mt-2 gap-4 ">
@@ -25,15 +25,17 @@
             <div>
                 {{-- Course Curriculum Section --}}
                 <div class="mt-8 pl-10 ">
-                    <h2 class="text-2xl font-bold text-color-primary-orange">Course content</h2>
-                    <p class="text-gray-500">41 sections • 490 lectures • 65h 33m total length </p>
-                    <button class="text-color-primary-orange">Expand all sections</button>
+                    <h2 class="text-2xl font-bold text-primary-orange">Course content</h2>
+                    <p class="text-gray-500 text-right">{{ $course->sections->count() }} sections</p>
+                    {{-- 490 lectures • 65h 33m total
+                        length --}}
+                    <button class="text-primary-orange">Expand all sections</button>
                     <div x-data="{ openSection: null }">
                         @foreach ($course->sections as $index => $section)
                             <div class="border-b border-gray-300 py-4">
                                 <button
                                     @click="openSection = openSection === {{ $index }} ? null : {{ $index }}"
-                                    class="w-full text-right text-lg font-bold text-color-primary-orange">
+                                    class="w-full text-right text-lg font-bold text-primary-orange">
                                     {{ $section->title }}
                                 </button>
                                 <div x-show="openSection === {{ $index }}" class="mt-2 text-gray-700">
@@ -47,7 +49,7 @@
 
             </div>
         </div>
-        <div class="w-1/4 bg-background-light p-4 rounded-lg">
+        <div class="lg:w-1/4 bg-background-light p-4 rounded-lg">
             <img src="https://placehold.co/600x400/000000/FFF" alt="Course Thumbnail" class="rounded-lg mb-4">
             <div class="text-2xl font-bold text-primary-orange">$549.00 <span
                     class="text-gray-500 line-through text-lg">$600.00</span>
@@ -95,7 +97,7 @@
                             </div>
                         </div>
                         <div class="grow p-5">
-                            <p class="text-sm/relaxed">Modal content..</p>
+                            <p class="text-sm/relaxed">Are you sure you want to purchase this Course?</p>
                         </div>
                         <div
                             class="flex items-center justify-end gap-1.5 border-t border-zinc-100 px-5 py-4 dark:border-zinc-700/50">
@@ -103,10 +105,15 @@
                                 class="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold leading-5 text-zinc-800 hover:border-zinc-300 hover:text-zinc-900 hover:shadow-xs focus:ring-zinc-300/25 active:border-zinc-200 active:shadow-none dark:border-zinc-700 dark:bg-transparent dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-200 dark:focus:ring-zinc-600/50 dark:active:border-zinc-700">
                                 Close
                             </button>
-                            <button x-on:click="open = false" type="button"
-                                class="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-800 px-3 py-2 text-sm font-medium leading-5 text-white hover:border-zinc-900 hover:bg-zinc-900 hover:text-white focus:outline-hidden focus:ring-2 focus:ring-zinc-500/50 active:border-zinc-700 active:bg-zinc-700 dark:border-zinc-700/50 dark:bg-zinc-700/50 dark:ring-zinc-700/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-700/75 dark:active:border-zinc-700/50 dark:active:bg-zinc-700/50">
-                                Save changes
-                            </button>
+                            <form method="POST" action="{{ route('courses.purchase', $course) }}">
+                                @csrf
+                                @method('POST')
+
+                                <button x-on:click="open = false" type="submit"
+                                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-800 px-3 py-2 text-sm font-medium leading-5 text-white hover:border-zinc-900 hover:bg-zinc-900 hover:text-white focus:outline-hidden focus:ring-2 focus:ring-zinc-500/50 active:border-zinc-700 active:bg-zinc-700 dark:border-zinc-700/50 dark:bg-zinc-700/50 dark:ring-zinc-700/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-700/75 dark:active:border-zinc-700/50 dark:active:bg-zinc-700/50">
+                                    Purchase
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <!-- END Modal Dialog -->
