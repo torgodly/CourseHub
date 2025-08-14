@@ -17,27 +17,27 @@ Route::get('/', [HomePageController::class, 'index'])->name('welcome');
 
 // Auth
 Route::middleware('guest')->group(function () {
-    Route::view('/login', 'auth.login')->name('login');
-    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register'])->name('register.store');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.store');
+    Route::view('/login', 'auth.login')->name('login'); // Done
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register'); // Done
+    Route::post('/register', [RegisterController::class, 'register'])->name('register.store'); // Done
+    Route::post('/login', [LoginController::class, 'login'])->name('login.store'); // Done
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Courses
 Route::prefix('courses')->name('courses.')->group(function () {
-    Route::get('/', [CourseController::class, 'index'])->name('index');
-    Route::get('{course:slug}', [CourseController::class, 'show'])->name('show');
-    Route::post('{course}/buy', [CourseController::class, 'purchase'])->name('purchase');
-    Route::post('{course}/enroll', [CourseController::class, 'enroll'])->name('enroll');
+    Route::get('/', [CourseController::class, 'index'])->name('index'); // Done
+    Route::get('{course:slug}', [CourseController::class, 'show'])->name('show'); // Done
+    Route::post('{course}/buy', [CourseController::class, 'purchase'])->name('purchase'); // Done
+    Route::post('{course}/enroll', [CourseController::class, 'enroll'])->name('enroll'); // Not done
     Route::get('{course}/sections/{section}', [CourseController::class, 'showSection'])->name('sections.show');
-    Route::post('{course}/favorite', [CourseController::class, 'toggleFavorite'])->name('favorite.toggle');
-    Route::post('{course}/rate', [CourseController::class, 'rate'])->name('rate');
+    Route::post('{course}/favorite', [CourseController::class, 'toggleFavorite'])->name('favorite.toggle'); // Done
+    Route::post('{course}/rate', [CourseController::class, 'rate'])->name('rate'); // Not done
 });
 
 // User Profile
-Route::prefix('profile')->middleware('auth')->name('profile.')->group(function () {
+Route::prefix('profile')->middleware('auth')->name('profile.')->group(function () { // done
     Route::get('/', [UserController::class, 'show'])->name('show');
     Route::post('update', [UserController::class, 'update'])->name('update');
     Route::post('password', [UserController::class, 'updatePassword'])->name('password');
@@ -45,18 +45,18 @@ Route::prefix('profile')->middleware('auth')->name('profile.')->group(function (
 
 // Trainer Application
 Route::prefix('trainer')->middleware('auth')->name('trainer.')->group(function () {
-    Route::get('apply', [TrainerController::class, 'showForm'])->name('apply');
+    Route::get('apply', [TrainerController::class, 'showForm'])->name('apply'); // not done
     Route::post('apply', [TrainerController::class, 'submitApplication'])->name('submit');
 });
 
 // Favorites
-Route::get('/favorites', [FavoriteController::class, 'index'])->middleware('auth')->name('favorites.index');
+Route::get('/favorites', [FavoriteController::class, 'index'])->middleware('auth')->name('favorites.index'); // not done
 
 // Purchased Courses
-Route::get('/my-courses', [PurchasedCourseController::class, 'index'])->middleware('auth')->name('courses.purchased');
+Route::get('/my-courses', [PurchasedCourseController::class, 'index'])->middleware('auth')->name('courses.purchased'); // Not done
 
 // Voucher
-Route::post('/vouchers/redeem', [VoucherController::class, 'redeem'])->middleware('auth')->name('vouchers.redeem');
+Route::post('/vouchers/redeem', [VoucherController::class, 'redeem'])->middleware('auth')->name('vouchers.redeem'); // Not done
 
 // Wallet
-Route::get('/wallet', [WalletController::class, 'index'])->middleware('auth')->name('wallet.index');
+Route::get('/wallet', [WalletController::class, 'index'])->middleware('auth')->name('wallet.index'); // not Done

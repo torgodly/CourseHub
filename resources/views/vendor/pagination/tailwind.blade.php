@@ -25,7 +25,7 @@
                             </li>
                         @else
                             <a href="{{ $url }}"
-                                class="text-gray-500 hover:bg-gray-200 px-4 py-2 rounded-full">{{ $page }}</a>
+                                class="text-gray-500 hover:bg-gray-200 px-4 py-2 rounded-full cursor-pointer">{{ $page }}</a>
                         @endif
                     @endforeach
                 @endif

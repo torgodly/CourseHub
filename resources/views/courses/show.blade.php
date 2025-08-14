@@ -24,8 +24,6 @@
 
 
             <div class="flex items-center justify-between ">
-                {{-- Favorite Button --}}
-                {{-- <img src="{{ asset($course->trainer->avatar) ?? 'https://placehold.co/50x50' }}" class="rounded-full" --}}
                 {{-- Author --}}
                 <div class="flex items-center gap-3 mb-6">
                     {{-- <img src="{{ asset($course->trainer->avatar) ?? 'https://placehold.co/50x50' }}" class="rounded-full" --}}
@@ -36,6 +34,7 @@
                     </div>
                 </div>
 
+                {{-- Favorite Button --}}
                 <div class="save">
                     @auth
                         {{-- Favorite Icon --}}
@@ -155,7 +154,7 @@
 
 
             </div>
-            <x-accordion :sections="$course->sections" />
+            <x-accordion :course="$course" />
         </div>
 
         {{-- Right: Progress + Lessons --}}
