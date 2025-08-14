@@ -8,6 +8,8 @@
     "require": {
         "php": "^8.2",
         "bavix/laravel-wallet": "^11.4",
+        "blade-ui-kit/blade-heroicons": "^2.6",
+        "blade-ui-kit/blade-icons": "^1.8",
         "dutchcodingcompany/filament-developer-logins": "^1.9",
         "filament/filament": "^3.3",
         "filament/spatie-laravel-media-library-plugin": "^3.3",
@@ -15,6 +17,7 @@
         "jeffgreco13/filament-breezy": "^2.6",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "php-flasher/flasher-laravel": "^2.1",
         "secondnetwork/blade-tabler-icons": "^3.34"
     },
     "require-dev": {

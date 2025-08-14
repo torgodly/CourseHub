@@ -1,139 +1,252 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- Breadcrumbs --}}
-    <div class="text-gray-500 text-sm mb-4 mt-20">
-        {{ $course->title }} < <a href="{{ route('courses.index') }}">{{ __('Courses') }}</a>
-            < <a href="{{ route('welcome') }}">{{ __('Home') }}</a>
-    </div>
+    <div class="p-6 flex gap-6 ">
+        {{-- Left: Course Content --}}
+        <div class="flex-1 mt-4">
 
-    {{-- Course Hero Section --}}
-    <div class="lg:flex justify-between items-start mx-auto p-6 bg-white shadow-lg rounded-lg mb-8">
-
-        {{-- Course Details --}}
-        <div class="lg:w-3/4">
-            <div>
-                <h1 class="text-4xl font-bold text-primary-orange">The complete advanced 6-week UI/UX design bootcamp</h1>
-                <div class="flex items-center text-gray-500 mt-2 gap-4 ">
-                    <span class="mr-4">⭐ {{ $course->average_rating }} ({{ $course->ratings->count() }})</span>
-                    <span class="mr-4">👥 {{ $course->enrollments->count() }} students</span>
-                    <span>👨‍🏫 {{ $course->trainer->name }}</span>
-                </div>
-                <p class="text-gray-700 mt-4">{{ $course->description }}</p>
+            {{-- Breadcrumbs --}}
+            <div class="text-gray-500 text-sm mb-4">
+                {{ $course->title }} < <a href="{{ route('courses.index') }}">{{ __('Courses') }}</a>
+                    < <a href="{{ route('welcome') }}">{{ __('Home') }}</a>
             </div>
 
-            <div>
-                {{-- Course Curriculum Section --}}
-                <div class="mt-8 pl-10 ">
-                    <h2 class="text-2xl font-bold text-primary-orange">Course content</h2>
-                    <p class="text-gray-500 text-right">{{ $course->sections->count() }} sections</p>
-                    {{-- 490 lectures • 65h 33m total
-                        length --}}
-                    <button class="text-primary-orange">Expand all sections</button>
-                    <div x-data="{ openSection: null }">
-                        @foreach ($course->sections as $index => $section)
-                            <div class="border-b border-gray-300 py-4">
-                                <button
-                                    @click="openSection = openSection === {{ $index }} ? null : {{ $index }}"
-                                    class="w-full text-right text-lg font-bold text-primary-orange">
-                                    {{ $section->title }}
-                                </button>
-                                <div x-show="openSection === {{ $index }}" class="mt-2 text-gray-700">
-                                    {{ $section->description }}
-                                </div>
-                            </div>
-                        @endforeach
+            {{-- Title --}}
+            <h1 class="text-4xl font-bold mb-4"> {{ $course->title }} </h1>
+
+            {{-- Video --}}
+            <div class="rounded-xl overflow-hidden shadow mb-6">
+                <img src="https://placehold.co/800x450" alt="Course Thumbnail" class="w-full">
+                <div class="bg-gray-900 text-white px-4 py-2 flex justify-between items-center">
+                    <span>⏯ 12:30 / 1:20:00</span>
+                </div>
+            </div>
+
+
+            <div class="flex items-center justify-between ">
+                {{-- Favorite Button --}}
+                {{-- <img src="{{ asset($course->trainer->avatar) ?? 'https://placehold.co/50x50' }}" class="rounded-full" --}}
+                {{-- Author --}}
+                <div class="flex items-center gap-3 mb-6">
+                    {{-- <img src="{{ asset($course->trainer->avatar) ?? 'https://placehold.co/50x50' }}" class="rounded-full" --}}
+                    <img src="{{ 'https://placehold.co/50x50' }}" class="rounded-full" alt="Mentor">
+                    <div>
+                        <p class="font-semibold"> {{ $course->trainer->name }} </p>
+                        <p class="text-sm text-gray-500">Mentor • {{ $course->trainer->profession }} Works at Google </p>
                     </div>
                 </div>
 
+                <div class="save">
+                    @auth
+                        {{-- Favorite Icon --}}
+                        <form method="POST" action="{{ route('courses.favorite.toggle', $course) }}">
+                            @csrf
+                            <button type="submit">
+                                @if ($course->isFavoritedBy(auth()->user()))
+                                    <x-heroicon-s-heart class="w-10 h-10 text-red-500" />
+                                @else
+                                    <x-heroicon-s-heart class="w-10 h-10 text-gray-500" />
+                                @endif
 
-            </div>
-        </div>
-        <div class="lg:w-1/4 bg-background-light p-4 rounded-lg">
-            <img src="https://placehold.co/600x400/000000/FFF" alt="Course Thumbnail" class="rounded-lg mb-4">
-            <div class="text-2xl font-bold text-primary-orange">$549.00 <span
-                    class="text-gray-500 line-through text-lg">$600.00</span>
-            </div>
-            <!-- Modal -->
-            <!-- An Alpine.js and Tailwind CSS component by https://pinemix.com -->
-            <div x-data="{ open: false }" x-on:keydown.esc.prevent="open = false">
-                <!-- Modal Toggle Button -->
-                <div class="w-full flex justify-center mt-4">
-
-                    <button x-on:click="open = true" type="button"
-                        class="inline-flex items-center justify-center gap-2 rounded-lg cursor-pointer bg-primary-orange text-white px-4 py-2 text-sm font-semibold ">
-                        اشترك الآن
-                    </button>
-                </div>
-                <!-- END Modal Toggle Button -->
-
-                <!-- Modal Backdrop -->
-                <div x-cloak x-show="open" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-bind:aria-hidden="!open" tabindex="-1" role="dialog"
-                    class="z-90 fixed inset-0 overflow-y-auto overflow-x-hidden bg-zinc-900/75 p-4 backdrop-blur-xs will-change-auto lg:p-8">
-                    <!-- Modal Dialog -->
-                    <div x-cloak x-show="open" x-on:click.away="open = false"
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-90 -translate-y-full"
-                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                        x-transition:leave-end="opacity-0 scale-125 translate-y-full" role="document"
-                        class="mx-auto flex w-full max-w-md flex-col overflow-hidden rounded-lg bg-white shadow-xs will-change-auto dark:bg-zinc-800 dark:text-zinc-100">
-                        <div class="flex items-center justify-between bg-zinc-50 px-5 py-4 dark:bg-zinc-700/20">
-                            <h3 class="text-lg font-bold">Modal Title</h3>
-                            <div class="-my-4">
-                                <button x-on:click="open = false" type="button"
-                                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold leading-5 text-zinc-800 hover:border-zinc-300 hover:text-zinc-900 hover:shadow-xs focus:ring-zinc-300/25 active:border-zinc-200 active:shadow-none dark:border-zinc-700 dark:bg-transparent dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-200 dark:focus:ring-zinc-600/50 dark:active:border-zinc-700">
-                                    <svg class="hi-solid hi-x -mx-1 inline-block size-4" fill="currentColor"
-                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="grow p-5">
-                            <p class="text-sm/relaxed">Are you sure you want to purchase this Course?</p>
-                        </div>
-                        <div
-                            class="flex items-center justify-end gap-1.5 border-t border-zinc-100 px-5 py-4 dark:border-zinc-700/50">
-                            <button x-on:click="open = false" type="button"
-                                class="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold leading-5 text-zinc-800 hover:border-zinc-300 hover:text-zinc-900 hover:shadow-xs focus:ring-zinc-300/25 active:border-zinc-200 active:shadow-none dark:border-zinc-700 dark:bg-transparent dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-200 dark:focus:ring-zinc-600/50 dark:active:border-zinc-700">
-                                Close
                             </button>
-                            <form method="POST" action="{{ route('courses.purchase', $course) }}">
-                                @csrf
-                                @method('POST')
-
-                                <button x-on:click="open = false" type="submit"
-                                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-800 px-3 py-2 text-sm font-medium leading-5 text-white hover:border-zinc-900 hover:bg-zinc-900 hover:text-white focus:outline-hidden focus:ring-2 focus:ring-zinc-500/50 active:border-zinc-700 active:bg-zinc-700 dark:border-zinc-700/50 dark:bg-zinc-700/50 dark:ring-zinc-700/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-700/75 dark:active:border-zinc-700/50 dark:active:bg-zinc-700/50">
-                                    Purchase
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- END Modal Dialog -->
+                        </form>
+                    @endauth
                 </div>
-                <!-- END Modal Backdrop -->
             </div>
-            <!-- END Modal -->
 
-            <div class="mt-4">
-                <h3 class="text-lg font-bold text-primary-orange">This course includes</h3>
-                <ul class="list-disc text-gray-700 px-8 py-3">
-                    <li>65 hours on-demand video</li>
-                    <li>49 downloadable resources</li>
-                    <li>Access on mobile and TV</li>
-                    <li>86 articles</li>
-                    <li>8 coding exercises</li>
-                    <li>Certificate of completion</li>
+            {{-- About --}}
+            <div class="mb-6">
+                <h2 class="font-bold text-lg mb-2">About This Course</h2>
+                <p class="text-gray-700">
+                    Unlock your creative potential with our Beginner-Level Illustrator Course! ...
+                    {{ $course->description }}
+                </p>
+            </div>
+
+            {{-- Suit For --}}
+            <div>
+                <h2 class="font-bold text-lg mb-2">This Course Suit For:</h2>
+                <ul class="list-disc pl-6 mr-3 text-gray-700 space-y-1">
+                    <li>Anyone who wants to start their career ...</li>
+                    <li>This course is for beginners ...</li>
+                    <li>For anyone who needs to add Illustration ...</li>
+                    <li>Aimed at people new to the world ...</li>
                 </ul>
             </div>
+
+            <div class="mx-auto px-4 py-8 sm:px-6 sm:py-12 lg:px-8 block md:hidden">
+
+                <div
+                    class="rounded-2xl border border-indigo-600 p-6 shadow-xs ring-1 ring-indigo-600 sm:order-last sm:px-8 lg:p-12">
+                    <div class="text-center">
+                        <h2 class="text-lg font-medium text-gray-900">
+                            Pro
+                            <span class="sr-only">Plan</span>
+                        </h2>
+
+                        <p class="mt-2 sm:mt-4">
+                            <strong class="text-3xl font-bold text-gray-900 sm:text-4xl"> 30$ </strong>
+
+                            <span class="text-sm font-medium text-gray-700">/month</span>
+                        </p>
+                    </div>
+
+                    <ul class="mt-6 space-y-2">
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> 20 users included </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> 5GB of storage </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Email support </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Help center access </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Phone support </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Community access </span>
+                        </li>
+                    </ul>
+
+                    <a href="#"
+                        class="mt-8 block rounded-full border border-indigo-600 bg-indigo-600 px-12 py-3 text-center text-sm font-medium text-white hover:bg-indigo-700 hover:ring-1 hover:ring-indigo-700 focus:ring-3 focus:outline-hidden">
+                        Get Started
+                    </a>
+                </div>
+
+
+            </div>
+            <x-accordion :sections="$course->sections" />
         </div>
+
+        {{-- Right: Progress + Lessons --}}
+        <div class="w-80 space-y-6 mt-19 hidden md:block">
+            {{-- Progress --}}
+
+            <div class="mx-auto px-4 py-8 sm:hidden md:block">
+
+                <div
+                    class="rounded-2xl border border-indigo-600 p-6 shadow-xs ring-1 ring-indigo-600 sm:order-last sm:px-8 lg:p-12">
+                    <div class="text-center">
+                        <h2 class="text-lg font-medium text-gray-900">
+                            Pro
+                            <span class="sr-only">Plan</span>
+                        </h2>
+
+                        <p class="mt-2 sm:mt-4">
+                            <strong class="text-3xl font-bold text-gray-900 sm:text-4xl"> 30$ </strong>
+
+                            <span class="text-sm font-medium text-gray-700">/month</span>
+                        </p>
+                    </div>
+
+                    <ul class="mt-6 space-y-2">
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> 20 users included </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> 5GB of storage </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Email support </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Help center access </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Phone support </span>
+                        </li>
+
+                        <li class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-700 shadow-sm">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+
+                            <span class="text-gray-700"> Community access </span>
+                        </li>
+                    </ul>
+
+                    <a href="#"
+                        class="mt-8 block rounded-full border border-indigo-600 bg-indigo-600 px-12 py-3 text-center text-sm font-medium text-white hover:bg-indigo-700 hover:ring-1 hover:ring-indigo-700 focus:ring-3 focus:outline-hidden">
+                        Get Started
+                    </a>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
 
     </div>
 @endsection

@@ -73,13 +73,16 @@ class CourseController extends Controller
         $user = auth()->user();
 
         if ($user->paid($course)) {
+            flash()->error(__('You have already purchased this course.'));
             return redirect()->back()->withErrors(['message' => __('You have already purchased this course.')]);
         }
 
         if ($user->safePay($course)) {
+            flash()->success(__('You have purchased this course successfully!'));
             return redirect()->back()->with('message', __('You have purchased this course successfully!'));
         }
 
+        flash()->error(__("Purchase failed: Don't have enough balance."));
         return redirect()->back()->withErrors(['message' => __('Purchase failed.')]);
     }
 
@@ -121,9 +124,15 @@ class CourseController extends Controller
         $user = auth()->user();
 
         if ($user->favorites()->toggle($course->id)) {
+            if ($user->favorites()->where('course_id', $course->id)->exists()) {
+                flash()->success(__('Course added to favorite.'));
+            } else {
+                flash()->info(__('Course removed from favorite.'));
+            }
             return redirect()->back()->with('message', __('Course favorite status updated.'));
         }
 
+        flash()->error(__('Failed to update course favorite status.'));
         return redirect()->back()->withErrors(['message' => __('Failed to update course favorite status.')]);
     }
 
@@ -141,7 +150,7 @@ class CourseController extends Controller
         $user->ratedCourses()->syncWithoutDetaching([
             $course->id => ['rating' => $request->rating],
         ]);
-
+        flash()->success(__('Course rated successfully.'));
         return redirect()->back()->with('message', __('Course rated successfully.'));
     }
 }
