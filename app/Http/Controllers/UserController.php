@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function show()
     {
-        return view('profile.show');
+        return view('profile.edit');
     }
 
     public function update(Request $request)

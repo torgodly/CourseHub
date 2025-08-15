@@ -27,18 +27,18 @@
                         <img src="{{ asset('images/Red AFAQ Logo Ver.png') }}" alt="AFAQ logo" class="w-36 h-auto">
                     </a>
                     <a href=""
-                        class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-myRed hover:text-myRed">فئات</a>
+                        class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">فئات</a>
                     {{-- @if (Auth::user()->is_admin)
                 <a href="{{ route('trainer', Auth::user()->id) }}"
-                    class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-myRed hover:text-myRed">لوحة
+                    class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">لوحة
                     تحكم المدرب</a>
             @elseif (Auth::user() !== null)
                 <a href="{{ route('instructor.create1', Auth::user()->id) }}"
-                    class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-myRed hover:text-myRed">سجل
+                    class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">سجل
                     كمدرب</a>
             @else
                 <a href="{{ route('instructor.create2') }}"
-                    class="text-[#333] font-bold  active:underline active:decoration-20 active:underline-offset-8 active:decoration-myRed hover:text-myRed">سجل
+                    class="text-[#333] font-bold  active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">سجل
                     كمدرب</a>
             @endif --}}
 
@@ -52,7 +52,7 @@
                                 placeholder="ابحث" />
                             <button class="absolute top-2 left-3 " type="button">
                                 <i
-                                    class="fa-solid fa-magnifying-glass text-lg text-[#757575] group-focus-within:text-myRed transition duration-300 "></i>
+                                    class="fa-solid fa-magnifying-glass text-lg text-[#757575] group-focus-within:text-primary-orange transition duration-300 "></i>
 
                             </button>
                         </div>
@@ -73,10 +73,43 @@
                                 </a>
 
                                 <a href="#"
-                                    class="bg-myRed px-3 py-2 text-white font-bold rounded-full hover:bg-myRedd active:bg-myRed">
+                                    class="bg-primary-orange px-3 py-2 text-white font-bold rounded-full hover:bg-primary-orange active:bg-primary-orange">
                                     لوحتي التعليمية
                                 </a>
+                                <div class="flex items-center gap-3 px-3 rounded-lg h-[55px] w-fit font-sans">
+                                    <!-- Icon -->
+                                    <div class="w-7 flex items-center justify-center">
+                                        <svg viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                            class="w-full">
+                                            <rect x="0.539915" y="6.28937" width="21" height="4" rx="1.5"
+                                                transform="rotate(-4.77865 0.539915 6.28937)" fill="#7D6B9D" stroke="black">
+                                            </rect>
+                                            <circle cx="11.5" cy="5.5" r="4.5" fill="#E7E037" stroke="#F9FD50"
+                                                stroke-width="2"></circle>
+                                            <path
+                                                d="M2.12011 6.64507C7.75028 6.98651 12.7643 6.94947 21.935 6.58499C22.789 6.55105 23.5 7.23329 23.5 8.08585V24C23.5 24.8284 22.8284 25.5 22 25.5H2C1.17157 25.5 0.5 24.8284 0.5 24V8.15475C0.5 7.2846 1.24157 6.59179 2.12011 6.64507Z"
+                                                fill="#BF8AEB" stroke="black"></path>
+                                            <path
+                                                d="M16 13.5H23.5V18.5H16C14.6193 18.5 13.5 17.3807 13.5 16C13.5 14.6193 14.6193 13.5 16 13.5Z"
+                                                fill="#BF8AEB" stroke="black"></path>
+                                        </svg>
+                                    </div>
 
+                                    <!-- Balance Info -->
+                                    <div class="flex flex-col items-start justify-start ml-4">
+                                        <span class="text-[8px] text-black font-light tracking-[0.6px]">Wallet
+                                            balance</span>
+                                        <p class="text-[13.5px] text-black font-semibold tracking-[0.5px]">
+                                            <span id="currency">$</span>{{ auth()->user()->wallet->balance }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Button -->
+                                    <button
+                                        class="flex items-center justify-center gap-1 px-4 py-[2px] bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-primary-orange focus:outline-none focus:ring-2 focus:ring-primary-orange">
+                                        <span class="text-lg leading-none">+</span>Add Money
+                                    </button>
+                                </div>
 
                             </div>
 
@@ -102,6 +135,12 @@
                                         <x-dropdown-link :href="route('profile.show')">
                                             {{ __('حسابي') }}
                                         </x-dropdown-link>
+                                        <x-dropdown-link :href="route('courses.purchased')">
+                                            {{ __('الدورات المشتراة') }}
+                                        </x-dropdown-link>
+                                        <x-dropdown-link :href="route('favorites.index')">
+                                            {{ __('المفضلة') }}
+                                        </x-dropdown-link>
 
                                         <!-- Authentication -->
                                         <form method="POST" action="{{ route('logout') }}">
@@ -118,12 +157,13 @@
                             </div>
                         @else
                             <a href="{{ route('register') }}"
-                                class="px-3 py-2 text-myRed font-bold rounded-full border border-myRed ">
+                                class="px-3 py-2 text-primary-orange font-bold rounded-full border border-primary-orange ">
                                 تسجيل جديد
                             </a>
 
                             @if (Route::has('register'))
-                                <a href="{{ route('login') }}" class="px-3 py-2 text-myRed font-bold rounded-full border ">
+                                <a href="{{ route('login') }}"
+                                    class="px-3 py-2 text-primary-orange font-bold rounded-full border ">
                                     تسجيل دخول
                                 </a>
                             @endif

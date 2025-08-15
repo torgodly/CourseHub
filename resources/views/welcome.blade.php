@@ -3,20 +3,20 @@
 @section('content')
     <div class="pt-[120px] pb-[40px] flex items-center justify-center container mx-auto ">
         <div class="w-[550px] mt-12">
-            <h2 class="text-3xl font-bold text-color-primary-orange">تعلم، تطوّر، انطلق!</h2>
-            <h3 class="text-2xl text-color-neutral-gray mt-2 mb-4">انضم إلى منصتنا التعليمية واكتسب المعرفة من خلال دورات
+            <h2 class="text-3xl font-bold text-primary-orange">تعلم، تطوّر، انطلق!</h2>
+            <h3 class="text-2xl text-neutral-gray mt-2 mb-4">انضم إلى منصتنا التعليمية واكتسب المعرفة من خلال دورات
                 أونلاين تفاعلية تمنحك تجربة تعلم ممتعة ومرنة. ابدأ رحلتك اليوم واكتشف آفاقًا جديدة من التطور
                 والإبداع.</h3>
-            <a href="#courses"
-                class="inline-block px-6 py-2 bg-color-primary-orange hover:bg-color-accent-purple active:bg-color-yellow text-white text-2xl rounded-full ">تصفح</a>
+            <a href="{{ route('courses.index') }}"
+                class="inline-block px-6 py-2 font-bold bg-primary-orange hover:bg-secondary-orange active:bg-yellow text-white text-xl rounded-full ">تصفح</a>
         </div>
         <img src="images/background1.png" alt="bg" class="w-[620px] h-auto">
     </div>
-    <div class="bg-color-background-light py-[40px]" id="courses">
+    <div class=" py-[40px]" id="courses">
         <div class="container mx-auto">
             <h2 class="text-3xl text-[#333] font-bold">
                 <span>الدورات </span>
-                <span class="text-myRed">التدربية</span>
+                <span class="text-primary-orange">التدربية</span>
             </h2>
             <ul class="flex gap-x-2 py-5 text-xl text-[#333]">
                 <li><a href="#">أحدث الدورات -</a></li>

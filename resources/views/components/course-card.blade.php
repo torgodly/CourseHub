@@ -4,21 +4,22 @@
     use Illuminate\Support\Str;
 @endphp
 
-<div class="bg-white rounded-xl shadow-md overflow-hidden border border-color-neutral-gray flex flex-col relative">
+<div class=" overflow-hidden bg-transparent flex flex-col relative">
     {{-- Course Image --}}
-    {{-- <img src="{{ asset($course->thumbnails) ?? 'https://placehold.co/500x300/000000/FFF' }}" alt="{{ $course->title }}" --}}
+    {{-- <img src="{{ asset($course->thumbnails) ?? 'https://placehold.co/500x300/000000/FFF' }}" alt="{{ $course->title }}"> --}}
+
     <img src=" https://placehold.co/600x400/000000/FFF" alt="{{ $course->title }}"
-        class="w-full h-44 object-cover bg-amber-50">
+        class="w-full shadow-md h-44 rounded-xl object-cover mb-2">
 
-    <div class="p-6 flex flex-col flex-grow ">
-        <div
-            class="flex items-center justify-between mb-4 absolute top-[37%] left-0 right-0 px-3 bg-white mx-2  rounded-md">
-            <div class=" flex items-center">
+    <div class="p-4 pt-1 bg-white flex flex-col flex-grow rounded-2xl border ">
+        <div class="flex items-center justify-between mb-4 bg-white pt-2  rounded-md">
 
-                {{-- Tag / Level --}}
-                <span class="text-xs px-2 py-1 bg-purple-200 text-accent-purple rounded inline-block">
-                    {{ $course->level ?? 'غير محدد' }}
-                </span>
+
+            <div class="flex items-center ">
+                {{-- Rating --}}
+                <div class="flex items-center mb-1 text-yellow text-xl">
+                    ★ <span class="ml-1 text-black text-sm">{{ $course->average_rating ?? '0' }}</span>
+                </div>
                 @auth
                     {{-- Favorite Icon --}}
                     <form class="" method="POST" action="{{ route('courses.favorite.toggle', $course) }}">
@@ -35,10 +36,20 @@
                     </form>
                 @endauth
             </div>
-            {{-- Rating --}}
-            <div class="flex items-center text-yellow text-xl">
-                ★ <span class="ml-1 text-black text-sm">{{ $course->average_rating ?? '0' }}</span>
-            </div>
+
+            {{-- Tag / Level --}}
+            @forelse ($course->tags as $tag)
+                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full ">
+                    {{ $course->tag->name }}
+                </span>
+            @empty
+            @endforelse
+
+            <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full ">
+                {{ $course->level ?? 'غير محدد' }}
+            </span>
+
+
         </div>
 
         {{-- Title --}}

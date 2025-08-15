@@ -69,7 +69,7 @@
                 <div class="bg-white p-4 rounded-lg shadow">
                     <h3 class="font-semibold mb-2">Your Study Progress 4%</h3>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 4%"></div>
+                        <div class="bg-primary-orange h-2 rounded-full" style="width: 4%"></div>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                         @if ($section->id == collect(request()->segments())->last())
                             <div class="flex items-center justify-between p-2 rounded bg-indigo-50">
                                 <div class="flex items-center gap-2">
-                                    <button class="text-indigo-600">⏸</button>
+                                    <button class="text-primary-orange">⏸</button>
                                     <span>{{ $section->title }}</span>
                                 </div>
                                 <span class="text-sm text-gray-500">1h 20 min</span>
@@ -93,7 +93,7 @@
                             <a href="{{ route('courses.sections.show', [$course, $section]) }}">
                                 <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
                                     <div class="flex items-center gap-2">
-                                        <button class="text-indigo-600">▶</button>
+                                        <button class="text-primary-orange">▶</button>
                                         <span class="">{{ $section->title }}</span>
                                     </div>
                                     <span class="text-sm text-gray-500">20 min</span>
@@ -126,7 +126,7 @@
             <div class="bg-white p-4 rounded-lg shadow">
                 <h3 class="font-semibold mb-2">Your Study Progress 4%</h3>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 4%"></div>
+                    <div class="bg-primary-orange h-2 rounded-full" style="width: 4%"></div>
                 </div>
             </div>
 
@@ -142,7 +142,7 @@
                         {{-- Current Section --}}
                         <div class="flex items-center justify-between p-2 rounded bg-indigo-50">
                             <div class="flex items-center gap-2">
-                                <button class="text-indigo-600">⏸</button>
+                                <button class="text-primary-orange">⏸</button>
                                 <span>{{ $courseSection->title }}</span>
                             </div>
                             <span class="text-sm text-gray-500">1h 20 min</span>
@@ -151,7 +151,7 @@
                         <a href="{{ route('courses.sections.show', [$course, $courseSection]) }}">
                             <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
                                 <div class="flex items-center gap-2">
-                                    <button class="text-indigo-600">▶</button>
+                                    <button class="text-primary-orange">▶</button>
                                     <span class="">{{ $courseSection->title }}</span>
                                 </div>
                                 <span class="text-sm text-gray-500">20 min</span>
