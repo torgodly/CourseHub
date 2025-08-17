@@ -50,13 +50,13 @@ Route::prefix('trainer')->middleware('auth')->name('trainer.')->group(function (
 });
 
 // Favorites
-Route::get('/favorites', [FavoriteController::class, 'index'])->middleware('auth')->name('favorites.index'); // not done
+Route::get('/favorites', [FavoriteController::class, 'index'])->middleware('auth')->name('favorites.index'); // Done
 
 // Purchased Courses
-Route::get('/my-courses', [PurchasedCourseController::class, 'index'])->middleware('auth')->name('courses.purchased'); // Not done
+Route::get('/my-courses', [PurchasedCourseController::class, 'index'])->middleware('auth')->name('courses.purchased'); // Done
 
 // Voucher
 Route::post('/vouchers/redeem', [VoucherController::class, 'redeem'])->middleware('auth')->name('vouchers.redeem'); // Not done
 
 // Wallet
-Route::get('/wallet', [WalletController::class, 'index'])->middleware('auth')->name('wallet.index'); // not Done
+Route::get('/wallet', [WalletController::class, 'index'])->middleware('auth')->name('wallet.index'); // Done

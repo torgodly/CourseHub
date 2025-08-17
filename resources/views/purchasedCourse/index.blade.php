@@ -48,26 +48,15 @@
                             </div>
                         </div>
 
-                        {{-- Favorite Icon --}}
-                        @auth
-                            <form class="self-center sm:ml-10 sm:mb-0 mb-4" method="POST"
-                                action="{{ route('courses.favorite.toggle', $course) }}">
-                                @csrf
-                                <button type="submit" x-data="{ isFavorite: {{ $course->isFavoritedBy(auth()->user()) ? 'true' : 'false' }} }"
-                                    :class="isFavorite ? 'text-red-500' : 'text-gray-400'"
-                                    class="p-2 rounded-full bg-black text-white transition-colors duration-300 cursor-pointer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
-                                        class="w-6 h-6">
-                                        <path
-                                            d="M12 21.35l-1.45-1.32C5.4 15.36 2
-                                                                                                                                                                                                                                                                                                                                            12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74
-                                                                                                                                                                                                                                                                                                                                            0 3.41.81 4.5 2.09C13.09 3.81 14.76
-                                                                                                                                                                                                                                                                                                                                            3 16.5 3 19.58 3 22 5.42 22 8.5c0
-                                                                                                                                                                                                                                                                                                                                            3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                    </svg>
-                                </button>
-                            </form>
-                        @endauth
+                        {{-- Watch Now Icon --}}
+
+                        <div class="text-center self-center  p-6">
+                            <a href="{{ route('courses.sections.show', [$course, $course->sections[0]]) }}"
+                                class="inline-block px-6 py-2 bg-primary-orange hover:bg-secondary-orange text-white text-lg rounded-md font-bold">
+                                {{ __('Watch Now') }}
+                            </a>
+                        </div>
+
                     </div>
                 @empty
                     {{-- No Favorites Message --}}

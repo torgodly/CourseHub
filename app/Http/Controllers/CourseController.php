@@ -79,6 +79,7 @@ class CourseController extends Controller
 
         if ($user->safePay($course)) {
             flash()->success(__('You have purchased this course successfully!'));
+            $user->enroll($course);
             return redirect()->back()->with('message', __('You have purchased this course successfully!'));
         }
 

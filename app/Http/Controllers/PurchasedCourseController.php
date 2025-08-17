@@ -12,7 +12,7 @@ class PurchasedCourseController extends Controller
     {
         $user = auth()->user();
         $purchasedCourses = $user->enrollments()
-            ->where('status', \App\Enum\EnrollmentStatus::Completed->value)
+            // ->where('status', \App\Enum\EnrollmentStatus::Completed->value)
             ->with('course')
             ->get()
             ->map(function ($enrollment) {
