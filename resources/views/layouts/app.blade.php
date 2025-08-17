@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar"> <!-- lang="ar": يحدد أن لغة الصفحة هي العربية-->
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+    <!-- lang="ar": يحدد أن لغة الصفحة هي العربية-->
     <!-- dir="rtl": يضبط الاتجاه الافتراضي للنص ليكون من اليمين إلى اليسار -->
 
     <head>
@@ -29,6 +30,19 @@
                     <a href=""
                         class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">{{ __('app.categories') }}</a>
                 </div>
+
+                <div class="flex items-center gap-x-6">
+                    <a href="{{ route('lang.switch', 'en') }}"
+                        class="{{ app()->getLocale() === 'en' ? 'font-bold underline' : '' }}">
+                        English
+                    </a>
+
+                    <a href="{{ route('lang.switch', 'ar') }}"
+                        class="{{ app()->getLocale() === 'ar' ? 'font-bold underline' : '' }}">
+                        العربية
+                    </a>
+                </div>
+
                 <div class="flex items-center">
                     <form>
                         <div class="relative group">

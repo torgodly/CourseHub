@@ -12,6 +12,12 @@ use App\Http\Controllers\PurchasedCourseController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\WalletController;
 
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'ar'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
 
 Route::get('/', [HomePageController::class, 'index'])->name('welcome');
 

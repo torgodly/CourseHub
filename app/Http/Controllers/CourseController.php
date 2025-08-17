@@ -38,7 +38,7 @@ class CourseController extends Controller
                 break;
         }
 
-        $courses = $query->paginate(5);
+        $courses = $query->paginate(14);
 
         return view('courses.index', [
             'courses' => $courses,

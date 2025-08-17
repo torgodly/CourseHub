@@ -11,8 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
+    // Add locale middleware globally to web routes
+        $middleware->web([
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+})
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
