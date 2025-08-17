@@ -73,7 +73,7 @@
                 <div class="" x-data="{ modalIsOpen: false }">
                     <button x-on:click="modalIsOpen = true" type="button"
                         class="mt-8 mx-auto block rounded-full border border-primary-orange bg-primary-orange px-12 py-3 text-center text-sm font-medium text-white hover:bg-orange-700 hover:ring-orange-700 focus:ring-3 focus:outline-hidden">
-                        Open Modal</button>
+                        Buy Now</button>
                     <div x-cloak x-show="modalIsOpen" x-transition.opacity.duration.200ms
                         x-trap.inert.noscroll="modalIsOpen" x-on:keydown.esc.window="modalIsOpen = false"
                         x-on:click.self="modalIsOpen = false"
@@ -100,15 +100,14 @@
                             </div>
                             <!-- Dialog Body -->
                             <div class="px-4 py-8">
-                                <p>As a token of appreciation, we have an exclusive offer just for you. Upgrade your
-                                    account now to unlock premium features and enjoy a seamless experience.</p>
+                                <p>You are about to pay <span class="font-bold">${{ $course->price }}</span> for this
+                                    course, are you sure you want to continue?</p>
                             </div>
                             <!-- Dialog Footer -->
                             <div
                                 class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20 sm:flex-row sm:items-center md:justify-end">
                                 <button x-on:click="modalIsOpen = false" type="button"
-                                    class="whitespace-nowrap rounded-sm px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:text-neutral-300 dark:focus-visible:outline-white">Remind
-                                    me later</button>
+                                    class="whitespace-nowrap rounded-sm px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:text-neutral-300 dark:focus-visible:outline-white">Cancel</button>
                                 <form action="{{ route('courses.purchase', $course->id) }}" method="POST">
                                     @csrf
                                     @method('POST')

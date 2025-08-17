@@ -9,11 +9,21 @@
             <button @click="open = (open === {{ $index }} ? null : {{ $index }})"
                 class="flex justify-between items-center w-full px-5 py-4 text-left font-semibold text-gray-800 hover:bg-gray-50">
 
-                <a href="{{ route('courses.sections.show', [$course, $section]) }}">
-                    <span>{{ $index + 1 }}
-                        .
-                        {{ $section->title }}</span>
-                </a>
+                {{-- TODO:: View Show Section to users who purchased the course only --}}
+                @auth
+                    <a href="{{ route('courses.sections.show', [$course, $section]) }}">
+                        <span>{{ $index + 1 }}
+                            .
+                            {{ $section->title }}</span>
+                    </a>
+                @else
+                    <div>
+                        <span>{{ $index + 1 }}
+                            .
+                            {{ $section->title }}</span>
+                    </div>
+
+                @endauth
 
                 <svg fill="#000000" x-show="open !== {{ $index }}" class="h-10 w-10 mt-2" version="1.1"
                     id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"

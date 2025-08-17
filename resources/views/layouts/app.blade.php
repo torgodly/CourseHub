@@ -98,10 +98,10 @@
                                 </div>
 
                                 <!-- Button -->
-                                <button
+                                <a href="{{ route('wallet.index') }}"
                                     class="flex items-center justify-center gap-1 px-4 py-2 font-bold bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-primary-orange focus:outline-none focus:ring-2 focus:ring-primary-orange">
                                     <span class="text-lg leading-none">+</span>{{ __('Add Money') }}
-                                </button>
+                                </a>
                             </div>
 
                         </div>
