@@ -6,7 +6,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Section;
 use App\Models\User;
-
+use Bavix\Wallet\Models\Transaction;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Course::factory(10)->create(
+        Course::factory(40)->create(
             [
                 'trainer_id' => $trainer->id,
             ]
@@ -49,6 +49,12 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
+
+        // Transaction::factory(100)->create()->each(function ($transaction) use ($users) {
+        //     $user = $users->random();
+        //     $transaction->user_id = $user->id;
+        //     $transaction->save();
+        // });
 
 
 

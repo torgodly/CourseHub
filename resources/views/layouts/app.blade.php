@@ -59,117 +59,110 @@
 
                     </form>
                 </div>
-                @if (Route::has('login'))
-                    <div class="flex items-center gap-x-3">
-                        @auth
 
-                            <div class="flex items-center gap-x-3">
-                                <a href="#" class="relative top-[3px] ">
-                                    <i class="fa-regular fa-heart text-xl "></i>
-                                </a>
+                <div class="flex items-center gap-x-3">
+                    @auth
 
-                                <a href="#" class="relative top-[4px] ">
-                                    <i class="fa-solid fa-cart-shopping text-xl "></i>
-                                </a>
+                        <div class="flex items-center gap-x-3">
 
-                                <a href="#"
-                                    class="bg-primary-orange px-3 py-2 text-white font-bold rounded-full hover:bg-primary-orange active:bg-primary-orange">
-                                    لوحتي التعليمية
-                                </a>
-                                <div class="flex items-center gap-3 px-3 rounded-lg h-[55px] w-fit font-sans">
-                                    <!-- Icon -->
-                                    <div class="w-7 flex items-center justify-center">
-                                        <svg viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                            class="w-full">
-                                            <rect x="0.539915" y="6.28937" width="21" height="4" rx="1.5"
-                                                transform="rotate(-4.77865 0.539915 6.28937)" fill="#7D6B9D" stroke="black">
-                                            </rect>
-                                            <circle cx="11.5" cy="5.5" r="4.5" fill="#E7E037" stroke="#F9FD50"
-                                                stroke-width="2"></circle>
-                                            <path
-                                                d="M2.12011 6.64507C7.75028 6.98651 12.7643 6.94947 21.935 6.58499C22.789 6.55105 23.5 7.23329 23.5 8.08585V24C23.5 24.8284 22.8284 25.5 22 25.5H2C1.17157 25.5 0.5 24.8284 0.5 24V8.15475C0.5 7.2846 1.24157 6.59179 2.12011 6.64507Z"
-                                                fill="#BF8AEB" stroke="black"></path>
-                                            <path
-                                                d="M16 13.5H23.5V18.5H16C14.6193 18.5 13.5 17.3807 13.5 16C13.5 14.6193 14.6193 13.5 16 13.5Z"
-                                                fill="#BF8AEB" stroke="black"></path>
-                                        </svg>
-                                    </div>
-
-                                    <!-- Balance Info -->
-                                    <div class="flex flex-col items-start justify-start ml-4">
-                                        <span class="text-[8px] text-black font-light tracking-[0.6px]">Wallet
-                                            balance</span>
-                                        <p class="text-[13.5px] text-black font-semibold tracking-[0.5px]">
-                                            <span id="currency">$</span>{{ auth()->user()->wallet->balance }}
-                                        </p>
-                                    </div>
-
-                                    <!-- Button -->
-                                    <button
-                                        class="flex items-center justify-center gap-1 px-4 py-[2px] bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-primary-orange focus:outline-none focus:ring-2 focus:ring-primary-orange">
-                                        <span class="text-lg leading-none">+</span>Add Money
-                                    </button>
+                            <a href="#"
+                                class="bg-primary-orange px-3 py-2 text-white font-bold rounded-full hover:bg-primary-orange active:bg-primary-orange">
+                                لوحتي التعليمية
+                            </a>
+                            <div class="flex items-center gap-3 px-3 rounded-lg h-[55px] w-fit font-sans">
+                                <!-- Icon -->
+                                <div class="w-7 flex items-center justify-center">
+                                    <svg viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                        class="w-full">
+                                        <rect x="0.539915" y="6.28937" width="21" height="4" rx="1.5"
+                                            transform="rotate(-4.77865 0.539915 6.28937)" fill="#7D6B9D" stroke="black">
+                                        </rect>
+                                        <circle cx="11.5" cy="5.5" r="4.5" fill="#E7E037" stroke="#F9FD50"
+                                            stroke-width="2"></circle>
+                                        <path
+                                            d="M2.12011 6.64507C7.75028 6.98651 12.7643 6.94947 21.935 6.58499C22.789 6.55105 23.5 7.23329 23.5 8.08585V24C23.5 24.8284 22.8284 25.5 22 25.5H2C1.17157 25.5 0.5 24.8284 0.5 24V8.15475C0.5 7.2846 1.24157 6.59179 2.12011 6.64507Z"
+                                            fill="#BF8AEB" stroke="black"></path>
+                                        <path
+                                            d="M16 13.5H23.5V18.5H16C14.6193 18.5 13.5 17.3807 13.5 16C13.5 14.6193 14.6193 13.5 16 13.5Z"
+                                            fill="#BF8AEB" stroke="black"></path>
+                                    </svg>
                                 </div>
 
+                                <!-- Balance Info -->
+                                <div class="flex flex-col items-start justify-start ml-4">
+                                    <span
+                                        class="text-xs text-black font-light tracking-[0.6px]">{{ __('Wallet balance') }}</span>
+                                    <p class="text-[13.5px] text-black font-semibold tracking-[0.5px]">
+                                        <span id="currency">$</span>{{ auth()->user()->wallet->balance }}
+                                    </p>
+                                </div>
+
+                                <!-- Button -->
+                                <button
+                                    class="flex items-center justify-center gap-1 px-4 py-2 font-bold bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-primary-orange focus:outline-none focus:ring-2 focus:ring-primary-orange">
+                                    <span class="text-lg leading-none">+</span>{{ __('Add Money') }}
+                                </button>
                             </div>
 
-                            <div class="hidden sm:flex sm:items-center ">
-                                <x-dropdown align="right" width="48">
-                                    <x-slot name="trigger">
-                                        <button
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                            <div>{{ Auth::user()->name }}</div>
+                        </div>
 
-                                            <div class="ms-1">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </div>
-                                        </button>
-                                    </x-slot>
+                        <div class="hidden sm:flex sm:items-center ">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                        <div>{{ Auth::user()->name }}</div>
 
-                                    <x-slot name="content">
-                                        <x-dropdown-link :href="route('profile.show')">
-                                            {{ __('حسابي') }}
-                                        </x-dropdown-link>
-                                        <x-dropdown-link :href="route('courses.purchased')">
-                                            {{ __('الدورات المشتراة') }}
-                                        </x-dropdown-link>
-                                        <x-dropdown-link :href="route('favorites.index')">
-                                            {{ __('المفضلة') }}
-                                        </x-dropdown-link>
+                                        <div class="ms-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
 
-                                        <!-- Authentication -->
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
+                                <x-slot name="content">
+                                    <x-dropdown-link :href="route('profile.show')">
+                                        {{ __('حسابي') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('courses.purchased')">
+                                        {{ __('الدورات المشتراة') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('favorites.index')">
+                                        {{ __('المفضلة') }}
+                                    </x-dropdown-link>
 
-                                            <x-dropdown-link :href="route('logout')"
-                                                onclick="event.preventDefault();
+                                    <!-- Authentication -->
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+
+                                        <x-dropdown-link :href="route('logout')"
+                                            onclick="event.preventDefault();
                                                         this.closest('form').submit();">
-                                                {{ __('تسجيل خروج') }}
-                                            </x-dropdown-link>
-                                        </form>
-                                    </x-slot>
-                                </x-dropdown>
-                            </div>
-                        @else
-                            <a href="{{ route('register') }}"
-                                class="px-3 py-2 text-primary-orange font-bold rounded-full border border-primary-orange ">
-                                تسجيل جديد
-                            </a>
+                                            {{ __('تسجيل خروج') }}
+                                        </x-dropdown-link>
+                                    </form>
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                    @else
+                        <a href="{{ route('register') }}"
+                            class="px-3 py-2 text-primary-orange font-bold rounded-full border border-primary-orange ">
+                            تسجيل جديد
+                        </a>
 
-                            @if (Route::has('register'))
-                                <a href="{{ route('login') }}"
-                                    class="px-3 py-2 text-primary-orange font-bold rounded-full border ">
-                                    تسجيل دخول
-                                </a>
-                            @endif
-                        @endauth
-                    </div>
-                @endif
+                        @if (Route::has('register'))
+                            <a href="{{ route('login') }}"
+                                class="px-3 py-2 text-primary-orange font-bold rounded-full border ">
+                                تسجيل دخول
+                            </a>
+                        @endif
+                    @endauth
+                </div>
+
 
             </div>
 
