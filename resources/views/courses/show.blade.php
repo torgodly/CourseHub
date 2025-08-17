@@ -7,8 +7,9 @@
 
             {{-- Breadcrumbs --}}
             <div class="text-gray-500 text-sm mb-4">
-                {{ $course->title }} < <a href="{{ route('courses.index') }}">{{ __('Courses') }}</a>
-                    < <a href="{{ route('welcome') }}">{{ __('Home') }}</a>
+                {{ $course->title }}
+                < <a href="{{ route('courses.index') }}"> {{ __('courses.title') }} </a>
+                    < <a href="{{ route('welcome') }}"> {{ __('Home') }} </a>
             </div>
 
             {{-- Title --}}

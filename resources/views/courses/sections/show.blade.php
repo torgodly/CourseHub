@@ -7,20 +7,23 @@
 
             {{-- Breadcrumbs --}}
             <div class="text-gray-500 text-sm mb-4">
-                {{ $course->title }} < <a href="{{ route('courses.index') }}">{{ __('Courses') }}</a>
-                    < <a href="{{ route('welcome') }}">{{ __('Home') }}</a>
+                {{ $course->title }} < <a href="{{ route('courses.index') }}">{{ __('sections.courses') }}</a>
+                    < <a href="{{ route('welcome') }}">{{ __('sections.home') }}</a>
             </div>
 
             {{-- Title --}}
             <h1 class="text-4xl font-bold"> {{ $section->title }} </h1>
-            <a href="{{ route('courses.show', $course) }}" class="text-md text-gray-500 mb-4">From {{ $course->title }} Course
+            <a href="{{ route('courses.show', $course) }}"
+                class="text-md text-gray-500 mb-4">{{ __('sections.from_course', ['course' => $course->title]) }}
             </a>
 
             {{-- Video --}}
             <div class="rounded-xl overflow-hidden shadow mb-6">
                 <img src="https://placehold.co/800x450" alt="Course Thumbnail" class="w-full">
                 <div class="bg-gray-900 text-white px-4 py-2 flex justify-between items-center">
-                    <span>⏯ 12:30 / 1:20:00</span>
+                    <span>
+                        {{ __('sections.video_duration', ['current' => '12:30', 'total' => '1:20:00']) }}
+                    </span>
                 </div>
             </div>
 
@@ -32,7 +35,8 @@
                     <img src="{{ 'https://placehold.co/50x50' }}" class="rounded-full" alt="Mentor">
                     <div>
                         <p class="font-semibold"> {{ $course->trainer->name }} </p>
-                        <p class="text-sm text-gray-500">Mentor • {{ $course->trainer->profession }} Works at Google </p>
+                        <p class="text-sm text-gray-500">
+                            {{ __('sections.mentor_profession', ['profession' => 'Works at Google']) }} </p>
                     </div>
                 </div>
 
@@ -57,7 +61,7 @@
 
             {{-- About --}}
             <div class="mb-6">
-                <h2 class="font-bold text-lg mb-2">About This Course</h2>
+                <h2 class="font-bold text-lg mb-2">{{ __('sections.about_course') }}</h2>
                 <p class="text-gray-700">
                     {{ $section->description }}
                 </p>
@@ -67,7 +71,7 @@
             <div class="my-10 block lg:hidden">
                 {{-- Progress --}}
                 <div class="bg-white p-4 rounded-lg shadow">
-                    <h3 class="font-semibold mb-2">Your Study Progress 4%</h3>
+                    <h3 class="font-semibold mb-2">{{ __('sections.study_progress', ['progress' => '4%']) }}</h3>
                     <div class="w-full bg-gray-200 rounded-full h-2">
                         <div class="bg-primary-orange h-2 rounded-full" style="width: 4%"></div>
                     </div>
@@ -76,7 +80,7 @@
                 {{-- Lessons --}}
                 <div class="bg-white p-4 rounded-lg  shadow space-y-2 my-6">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="font-semibold">Course Completion</span>
+                        <span class="font-semibold">{{ __('sections.course_completion') }}</span>
                         <span class="text-gray-500">1/{{ $course->sections->count() }}</span>
                     </div>
 
@@ -84,7 +88,9 @@
                         @if ($section->id == collect(request()->segments())->last())
                             <div class="flex items-center justify-between p-2 rounded bg-indigo-50">
                                 <div class="flex items-center gap-2">
-                                    <button class="text-primary-orange">⏸</button>
+                                    <button class="text-primary-orange">
+                                        {{ __('sections.pause') }}
+                                    </button>
                                     <span>{{ $section->title }}</span>
                                 </div>
                                 <span class="text-sm text-gray-500">1h 20 min</span>
@@ -93,7 +99,9 @@
                             <a href="{{ route('courses.sections.show', [$course, $section]) }}">
                                 <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
                                     <div class="flex items-center gap-2">
-                                        <button class="text-primary-orange">▶</button>
+                                        <button class="text-primary-orange">
+                                            {{ __('sections.play') }}
+                                        </button>
                                         <span class="">{{ $section->title }}</span>
                                     </div>
                                     <span class="text-sm text-gray-500">20 min</span>
@@ -101,9 +109,6 @@
                             </a>
                         @endif
                     @endforeach
-
-
-
                 </div>
             </div>
 

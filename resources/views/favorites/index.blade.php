@@ -5,10 +5,9 @@
 
         {{-- Title & Description --}}
         <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold mb-2">المفضلة</h1>
+            <h1 class="text-2xl font-bold mb-2">{{ __('favorites.title') }}</h1>
             <p class="text-gray-600 max-w-2xl mx-auto">
-                نرافقك خطوة بخطوة بدورات تدريبية شاملة تعتمد على التطبيق العملي لاكتساب المهارات الحقيقية
-                التي تؤهلك لسوق العمل بثقة وجاهزية كاملة.
+                {{ __('favorites.description') }}
             </p>
         </div>
 
@@ -41,9 +40,9 @@
                             <div class="flex items-center gap-2 mt-auto">
                                 <img src="{{ $course->trainer->image ?? 'https://placehold.co/40x40' }}"
                                     class="w-6 h-6 bg-primary-orange rounded-full object-cover"
-                                    alt="{{ $course->trainer->name ?? 'المدرب' }}">
+                                    alt="{{ $course->trainer->name ?? __('favorites.trainer') }}">
                                 <span class="text-xs text-gray-600">
-                                    {{ $course->trainer->name ?? 'غير معروف' }}
+                                    {{ $course->trainer->name ?? __('favorites.unknown') }}
                                 </span>
                             </div>
                         </div>
@@ -60,10 +59,10 @@
                                         class="w-6 h-6">
                                         <path
                                             d="M12 21.35l-1.45-1.32C5.4 15.36 2
-                                                                                                                                                                                                                                                                                                            12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74
-                                                                                                                                                                                                                                                                                                            0 3.41.81 4.5 2.09C13.09 3.81 14.76
-                                                                                                                                                                                                                                                                                                            3 16.5 3 19.58 3 22 5.42 22 8.5c0
-                                                                                                                                                                                                                                                                                                            3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                                                                                                                                                                                                                                                                                                    12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74
+                                                                                                                                                                                                                                                                                                                    0 3.41.81 4.5 2.09C13.09 3.81 14.76
+                                                                                                                                                                                                                                                                                                                    3 16.5 3 19.58 3 22 5.42 22 8.5c0
+                                                                                                                                                                                                                                                                                                                    3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                     </svg>
                                 </button>
                             </form>
@@ -72,9 +71,9 @@
                 @empty
                     {{-- No Favorites Message --}}
                     <div class="text-center  mt-4 flex gap-2 items-center justify-center">
-                        <p class="text-gray-500"> لا توجد دورات مفضلة بعد.</p><a
-                            class="text-primary-color underline cursor-pointer" href="{{ route('courses.index') }}">الانتقال
-                            إلى صفحة الدورات</a>
+                        <p class="text-gray-500"> {{ __('favorites.no_favorites') }}</p><a
+                            class="text-primary-color underline cursor-pointer"
+                            href="{{ route('courses.index') }}">{{ __('favorites.go_to_courses') }}</a>
                     </div>
                 @endforelse
 

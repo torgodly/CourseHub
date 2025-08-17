@@ -5,10 +5,9 @@
 
         {{-- Title & Description --}}
         <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold mb-2">الدورات المسجلة</h1>
+            <h1 class="text-2xl font-bold mb-2">{{ __('purchased_courses.title') }}</h1>
             <p class="text-gray-600 max-w-2xl mx-auto">
-                نرافقك خطوة بخطوة بدورات تدريبية شاملة تعتمد على التطبيق العملي لاكتساب المهارات الحقيقية
-                التي تؤهلك لسوق العمل بثقة وجاهزية كاملة.
+                {{ __('purchased_courses.description') }}
             </p>
         </div>
 
@@ -41,9 +40,9 @@
                             <div class="flex items-center gap-2 mt-auto">
                                 <img src="{{ $course->trainer->image ?? 'https://placehold.co/40x40' }}"
                                     class="w-6 h-6 bg-primary-orange rounded-full object-cover"
-                                    alt="{{ $course->trainer->name ?? 'المدرب' }}">
+                                    alt="{{ $course->trainer->name ?? __('purchased_courses.trainer') }}">
                                 <span class="text-xs text-gray-600">
-                                    {{ $course->trainer->name ?? 'غير معروف' }}
+                                    {{ $course->trainer->name ?? __('purchased_courses.unknown') }}
                                 </span>
                             </div>
                         </div>
@@ -53,7 +52,7 @@
                         <div class="text-center self-center  p-6">
                             <a href="{{ route('courses.sections.show', [$course, $course->sections[0]]) }}"
                                 class="inline-block px-6 py-2 bg-primary-orange hover:bg-secondary-orange text-white text-lg rounded-md font-bold">
-                                {{ __('Watch Now') }}
+                                {{ __('purchased_courses.watch_now') }}
                             </a>
                         </div>
 
@@ -61,9 +60,9 @@
                 @empty
                     {{-- No Favorites Message --}}
                     <div class="text-center  mt-4 flex gap-2 items-center justify-center">
-                        <p class="text-gray-500"> لا توجد دورات مسجلة بعد.</p><a
-                            class="text-primary-color underline cursor-pointer" href="{{ route('courses.index') }}">الانتقال
-                            إلى صفحة الدورات</a>
+                        <p class="text-gray-500"> {{ __('purchased_courses.no_courses') }}</p><a
+                            class="text-primary-color underline cursor-pointer"
+                            href="{{ route('courses.index') }}">{{ __('purchased_courses.go_to_courses') }}</a>
                     </div>
                 @endforelse
 

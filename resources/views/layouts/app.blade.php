@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>آفاق | دورات تدربية</title>
+        <title>{{ __('app.title') }}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -27,48 +27,27 @@
                         <img src="{{ asset('images/Red AFAQ Logo Ver.png') }}" alt="AFAQ logo" class="w-36 h-auto">
                     </a>
                     <a href=""
-                        class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">فئات</a>
-                    {{-- @if (Auth::user()->is_admin)
-                <a href="{{ route('trainer', Auth::user()->id) }}"
-                    class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">لوحة
-                    تحكم المدرب</a>
-            @elseif (Auth::user() !== null)
-                <a href="{{ route('instructor.create1', Auth::user()->id) }}"
-                    class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">سجل
-                    كمدرب</a>
-            @else
-                <a href="{{ route('instructor.create2') }}"
-                    class="text-[#333] font-bold  active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">سجل
-                    كمدرب</a>
-            @endif --}}
-
+                        class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">{{ __('app.categories') }}</a>
                 </div>
                 <div class="flex items-center">
                     <form>
-
                         <div class="relative group">
                             <input
                                 class=" w-[250px] bg-[#f4f4f4] placeholder:text-[#757575] placeholder: text-slate-700 text-sm border border-[#f4f4f4] rounded-full px-3 py-2 transition duration-300  focus:border-[#f7e4d6] focus:bg-[#f7e4d6] focus:ring-0 "
-                                placeholder="ابحث" />
+                                placeholder="{{ __('app.search') }}" />
                             <button class="absolute top-2 left-3 " type="button">
                                 <i
                                     class="fa-solid fa-magnifying-glass text-lg text-[#757575] group-focus-within:text-primary-orange transition duration-300 "></i>
-
                             </button>
                         </div>
-
                     </form>
                 </div>
 
                 <div class="flex items-center gap-x-3">
                     @auth
-
                         <div class="flex items-center gap-x-3">
 
-                            <a href="#"
-                                class="bg-primary-orange px-3 py-2 text-white font-bold rounded-full hover:bg-primary-orange active:bg-primary-orange">
-                                لوحتي التعليمية
-                            </a>
+
                             <div class="flex items-center gap-3 px-3 rounded-lg h-[55px] w-fit font-sans">
                                 <!-- Icon -->
                                 <div class="w-7 flex items-center justify-center">
@@ -91,7 +70,7 @@
                                 <!-- Balance Info -->
                                 <div class="flex flex-col items-start justify-start ml-4">
                                     <span
-                                        class="text-xs text-black font-light tracking-[0.6px]">{{ __('Wallet balance') }}</span>
+                                        class="text-xs text-black font-light tracking-[0.6px]">{{ __('app.wallet_balance') }}</span>
                                     <p class="text-[13.5px] text-black font-semibold tracking-[0.5px]">
                                         <span id="currency">$</span>{{ auth()->user()->wallet->balance }}
                                     </p>
@@ -100,12 +79,17 @@
                                 <!-- Button -->
                                 <a href="{{ route('wallet.index') }}"
                                     class="flex items-center justify-center gap-1 px-4 py-2 font-bold bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-primary-orange focus:outline-none focus:ring-2 focus:ring-primary-orange">
-                                    <span class="text-lg leading-none">+</span>{{ __('Add Money') }}
+                                    <span class="text-lg leading-none">+</span>{{ __('app.add_money') }}
                                 </a>
                             </div>
-
+                            <!-- Button -->
+                            <a href="/trainer"
+                                class="flex items-center justify-center gap-1 px-4 py-2 font-bold bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-primary-orange focus:outline-none focus:ring-2 focus:ring-primary-orange">
+                                <span class="text-lg leading-none"></span>{{ __('app.my_dashboard') }}
+                            </a>
                         </div>
 
+                        {{-- User Dropdown --}}
                         <div class="hidden sm:flex sm:items-center ">
                             <x-dropdown align="right" width="48">
                                 <x-slot name="trigger">
@@ -126,13 +110,13 @@
 
                                 <x-slot name="content">
                                     <x-dropdown-link :href="route('profile.show')">
-                                        {{ __('حسابي') }}
+                                        {{ __('app.profile') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('courses.purchased')">
-                                        {{ __('الدورات المشتراة') }}
+                                        {{ __('app.purchased_courses') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('favorites.index')">
-                                        {{ __('المفضلة') }}
+                                        {{ __('app.favorites') }}
                                     </x-dropdown-link>
 
                                     <!-- Authentication -->
@@ -142,7 +126,7 @@
                                         <x-dropdown-link :href="route('logout')"
                                             onclick="event.preventDefault();
                                                         this.closest('form').submit();">
-                                            {{ __('تسجيل خروج') }}
+                                            {{ __('app.logout') }}
                                         </x-dropdown-link>
                                     </form>
                                 </x-slot>
@@ -151,13 +135,13 @@
                     @else
                         <a href="{{ route('register') }}"
                             class="px-3 py-2 text-primary-orange font-bold rounded-full border border-primary-orange ">
-                            تسجيل جديد
+                            {{ __('app.register') }}
                         </a>
 
                         @if (Route::has('register'))
                             <a href="{{ route('login') }}"
                                 class="px-3 py-2 text-primary-orange font-bold rounded-full border ">
-                                تسجيل دخول
+                                {{ __('app.login') }}
                             </a>
                         @endif
                     @endauth
@@ -180,19 +164,19 @@
         <div class="container mx-auto">
             <div class="flex gap-x-20">
                 <ul>
-                    <li class="text-xl text-[#333] font-bold mb-3">آفاق</li>
-                    <li class="mb-3 text-[#333]"><a href="#">عن آفاق</a></li>
-                    <li class="mb-3 text-[#333]"><a href="#">تواصل معنا</a></li>
-                    <li class="mb-3 text-[#333]"><a href="#">شروط والأحكام</a></li>
+                    <li class="text-xl text-[#333] font-bold mb-3">{{ __('app.afaq') }}</li>
+                    <li class="mb-3 text-[#333]"><a href="#">{{ __('app.about_afaq') }}</a></li>
+                    <li class="mb-3 text-[#333]"><a href="#">{{ __('app.contact_us') }}</a></li>
+                    <li class="mb-3 text-[#333]"><a href="#">{{ __('app.terms_conditions') }}</a></li>
                 </ul>
                 <ul>
-                    <li class="text-xl text-[#333] font-bold mb-3">الروابط</li>
-                    <li class="mb-3 text-[#333]"><a href="/">الرئيسية</a></li>
-                    <li class="mb-3 text-[#333]"><a href="#">انظم كمدرب</a></li>
-                    <li class="mb-3 text-[#333]"><a href="#">فئات</a></A></li>
+                    <li class="text-xl text-[#333] font-bold mb-3">{{ __('app.links') }}</li>
+                    <li class="mb-3 text-[#333]"><a href="/">{{ __('app.home') }}</a></li>
+                    <li class="mb-3 text-[#333]"><a href="#">{{ __('app.become_trainer') }}</a></li>
+                    <li class="mb-3 text-[#333]"><a href="#">{{ __('app.categories') }}</a></A></li>
                 </ul>
                 <ul>
-                    <li class="text-xl text-[#333] font-bold mb-3">التواصل</li>
+                    <li class="text-xl text-[#333] font-bold mb-3">{{ __('app.communication') }}</li>
                     <li class="mb-3 text-[#333]">
                         <a href="https://wa.me/218910078151" target="_blank">
                             0910078151
@@ -209,7 +193,7 @@
                 </ul>
             </div>
             <div class="mt-16 text-center text-[#333] font-light">
-                جميع الحقوق محفوظة © {{ date('Y') }} منصة آفاق
+                {{ __('app.copyright', ['year' => date('Y')]) }}
             </div>
         </div>
     </div>

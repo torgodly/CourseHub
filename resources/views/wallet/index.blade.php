@@ -5,9 +5,9 @@
 
         {{-- Title & Description --}}
         <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold mb-2">المحفظة</h1>
+            <h1 class="text-2xl font-bold mb-2">{{ __('wallet.title') }}</h1>
             <p class="text-gray-600 max-w-2xl mx-auto">
-                المحفظة هي مكانك لإدارة المعاملات المالية الخاصة بك. يمكنك الاطلاع على جميع المعاملات التي تمت في محفظتك
+                {{ __('wallet.description') }}
             </p>
         </div>
 
@@ -23,13 +23,13 @@
                                             <tr>
                                                 <th scope="col"
                                                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                                                    Transaction Type</th>
+                                                    {{ __('wallet.transaction_type') }}</th>
                                                 <th scope="col"
                                                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                                                    Amount</th>
+                                                    {{ __('wallet.amount') }}</th>
                                                 <th scope="col"
                                                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                                                    Description</th>
+                                                    {{ __('wallet.description') }}</th>
 
                                             </tr>
                                         </thead>
@@ -60,7 +60,7 @@
                     </div>
                 @else
                     <div class="text-center text-gray-500">
-                        لا توجد معاملات في المحفظة بعد.
+                        {{ __('wallet.no_transactions') }}
                     </div>
                 @endif
             </div>

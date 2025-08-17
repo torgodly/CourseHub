@@ -6,10 +6,10 @@
     <div class="flex gap-4 border-gray-200 mb-6">
         @php
             $tabs = [
-                'all' => 'الكل',
-                'new' => 'أحدث الدورات',
-                'popular' => 'الأكثر شيوعاً',
-                'specialties' => 'التخصصات',
+                'all' => __('course_tabs.all'),
+                'new' => __('course_tabs.new'),
+                'popular' => __('course_tabs.popular'),
+                'specialties' => __('course_tabs.specialties'),
             ];
         @endphp
 
@@ -26,7 +26,7 @@
         {{-- Left: Filters --}}
         <div class="flex gap-4">
             <select class="border rounded-xl px-3 py-2 text-sm font-bold text-gray-800 border-gray-400">
-                <option>فرز حسب</option>
+                <option>{{ __('course_tabs.sort_by') }}</option>
             </select>
         </div>
 
@@ -38,7 +38,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V20a1 1 0 01-1.447.894l-4-2A1 1 0 018 18v-4.586L3.293 6.707A1 1 0 013 6V4z" />
             </svg>
-            الفلترة
+            {{ __('course_tabs.filter') }}
         </button>
 
     </div>

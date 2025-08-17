@@ -46,9 +46,8 @@
             @endforelse
 
             <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full ">
-                {{ $course->level ?? 'غير محدد' }}
+                {{ $course->level ?? __('course_card.not_specified') }}
             </span>
-
 
         </div>
 
@@ -68,9 +67,9 @@
         <div class="flex items-center gap-2 mb-4">
             <img src="{{ $course->trainer->image ?? 'https://placehold.co/40x40' }}"
                 class="w-6 h-6 bg-primary-orange rounded-full object-cover"
-                alt="{{ $course->trainer->name ?? 'المدرب' }}">
+                alt="{{ $course->trainer->name ?? __('course_card.trainer') }}">
             <span class="text-xs text-gray-600">
-                {{ $course->trainer->name ?? 'غير معروف' }}
+                {{ $course->trainer->name ?? __('course_card.unknown') }}
             </span>
         </div>
 
@@ -81,7 +80,7 @@
                 class="flex items-center justify-center px-3 py-2 orange-300 mx-auto mt-auto rounded-md bg-primary-orange hover:bg-orange-600 font-bold text-white">
 
                 <span class="text-lg mr-1">
-                    {{ $course->price ?? '0' }} د.ل
+                    {{ $course->price ?? '0' }} {{ __('course_card.currency') }}
                 </span>
             </button>
 
