@@ -35,9 +35,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::prefix('courses')->name('courses.')->group(function () {
     Route::get('/', [CourseController::class, 'index'])->name('index'); // Done
     Route::get('{course:slug}', [CourseController::class, 'show'])->name('show'); // Done
-    Route::post('{course}/buy', [CourseController::class, 'purchase'])->name('purchase'); // Done
-    Route::post('{course}/enroll', [CourseController::class, 'enroll'])->name('enroll'); // Not done
-    Route::get('{course}/sections/{section}', [CourseController::class, 'showSection'])->name('sections.show');
+    Route::post('{course}/buy', [CourseController::class, 'purchase'])->name('purchase.course'); // Done
+    Route::post('{course}/enroll', [CourseController::class, 'enroll'])->name('enroll.course'); // Not done
     Route::post('{course}/favorite', [CourseController::class, 'toggleFavorite'])->name('favorite.toggle'); // Done
     Route::post('{course}/rate', [CourseController::class, 'rate'])->name('rate'); // Not done
 });
@@ -66,3 +65,9 @@ Route::post('/vouchers/redeem', [VoucherController::class, 'redeem'])->middlewar
 
 // Wallet
 Route::get('/wallet', [WalletController::class, 'index'])->middleware('auth')->name('wallet.index'); // Done
+
+
+//test
+Route::get('/test', function () {
+    return view('test');
+})->name('test'); // Test route

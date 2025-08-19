@@ -4,87 +4,94 @@
     use Illuminate\Support\Str;
 @endphp
 
-<div class=" overflow-hidden bg-transparent flex flex-col relative">
-    {{-- Course Image --}}
-    {{-- <img src="{{ asset($course->thumbnails) ?? 'https://placehold.co/500x300/000000/FFF' }}" alt="{{ $course->title }}"> --}}
+<a href="{{ route('courses.show', $course->slug) }}">
+    <div
+        class="max-w-sm rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition duration-300 flex flex-col">
+        {{-- Course Image --}}
+        <img src="{{ asset($course->thumbnails) ?: 'https://placehold.co/500x300/000000/FFF' }}"
+             alt="{{ $course->title }}"
+             class="w-full h-48 object-cover">
 
-    <img src=" https://placehold.co/600x400/000000/FFF" alt="{{ $course->title }}"
-        class="w-full shadow-md h-44 rounded-xl object-cover mb-2">
+        <div class="p-5 flex flex-col flex-grow">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center">
+                    {{-- Rating --}}
+                    <div class="flex items-center text-yellow-400 text-lg">
+                        ★ <span class="ml-1 text-gray-800 text-sm">{{ $course->average_rating ?? '0' }}</span>
+                    </div>
 
-    <div class="p-4 pt-1 bg-white flex flex-col flex-grow rounded-2xl border ">
-        <div class="flex items-center justify-between mb-4 bg-white pt-2  rounded-md">
+                    @auth
+                        {{-- Favorite --}}
+                        <form method="POST" action="{{ route('courses.favorite.toggle', $course) }}" class="ml-3">
+                            @csrf
+                            @method('POST')
+                            <button type="submit" class="transition-colors duration-300 cursor-pointer">
+                                <x-tabler-heart
+                                    class="w-6 h-6 text-red-500 {{ $course->isFavoritedBy(auth()->user()) ? 'fill-red-500' : ' ' }}"/>
+                            </button>
+                        </form>
 
-
-            <div class="flex items-center ">
-                {{-- Rating --}}
-                <div class="flex items-center mb-1 text-yellow text-xl">
-                    ★ <span class="ml-1 text-black text-sm">{{ $course->average_rating ?? '0' }}</span>
+                    @endauth
                 </div>
-                @auth
-                    {{-- Favorite Icon --}}
-                    <form class="" method="POST" action="{{ route('courses.favorite.toggle', $course) }}">
-                        @csrf
-                        @method('POST')
-                        <button type="submit" @click="toggleFavorite" x-data="{ isFavorite: {{ $course->isFavoritedBy(auth()->user()) ? 'true' : 'false' }} }"
-                            :class="isFavorite ? 'text-red-500' : 'text-gray-500'"
-                            class="mx-4 mt-1 text-xl transition-colors duration-300 cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
-                                <path
-                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                            </svg>
-                        </button>
-                    </form>
-                @endauth
+
+                {{-- Tags & Level --}}
+                <div class="flex gap-2">
+                    @forelse ($course->tags as $tag)
+                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                        {{ $tag->name }}
+                    </span>
+                    @empty
+                    @endforelse
+                        @php
+                            $levelClasses = [
+                                'Beginner' => 'text-green-800 bg-green-100',
+                                'Intermediate' => 'text-yellow-800 bg-yellow-100',
+                                'Advanced' => 'text-red-800 bg-red-100',
+                            ];
+                            $levelKey = $course->level->name; // or ->value depending on your enum
+                        @endphp
+
+                        <span class="text-xs px-2 py-1 rounded-full {{ $levelClasses[$levelKey] ?? 'text-gray-700 bg-gray-100' }}">
+    {{ $course->level->getLabel() ?? __('Not specified') }}
+</span>
+
+
+                </div>
             </div>
 
-            {{-- Tag / Level --}}
-            @forelse ($course->tags as $tag)
-                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full ">
-                    {{ $course->tag->name }}
-                </span>
-            @empty
-            @endforelse
+            {{-- Title --}}
+            <h3 class="text-lg font-semibold text-primary-orange mb-2">
+                <p
+                    class="hover:text-orange-600 transition-colors">
+                    {{ $course->title }}
+                </p>
+            </h3>
 
-            <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full ">
-                {{ $course->level ?? __('course_card.not_specified') }}
+            {{-- Description --}}
+            <p class="text-sm text-gray-600 mb-4 flex-grow">
+                {{ Str::words($course->description ?? '', 15, '...') }}
+            </p>
+
+            {{-- Instructor --}}
+            <div class="flex items-center gap-2 mb-4">
+                <img src="{{ $course->trainer->image ?? 'https://placehold.co/40x40' }}"
+                     class="w-8 h-8 rounded-full object-cover"
+                     alt="{{ $course->trainer->name ?? __('Trainer') }}">
+                <span class="text-xs text-gray-700">
+                {{ $course->trainer->name ?? __('Unknown') }}
             </span>
+            </div>
 
-        </div>
-
-        {{-- Title --}}
-        <h3 class="text-lg font-semibold text-primary-orange mb-1">
-            <a href="{{ route('courses.show', $course->slug) }}" class="hover:text-primaryOrange transition-colors">
-                {{ $course->title }}
-            </a>
-        </h3>
-
-        {{-- Description (limited to 100 words) --}}
-        <p class="text-sm text-gray-500 mb-4 flex-grow">
-            {{ Str::words($course->description ?? '', 15, '...') }}
-        </p>
-
-        {{-- Instructor --}}
-        <div class="flex items-center gap-2 mb-4">
-            <img src="{{ $course->trainer->image ?? 'https://placehold.co/40x40' }}"
-                class="w-6 h-6 bg-primary-orange rounded-full object-cover"
-                alt="{{ $course->trainer->name ?? __('course_card.trainer') }}">
-            <span class="text-xs text-gray-600">
-                {{ $course->trainer->name ?? __('course_card.unknown') }}
+            {{-- Price & Button --}}
+            <div class="flex items-center justify-between mt-auto">
+            <span class="text-indigo-600 font-bold text-lg">
+                {{ $course->price ?? '0' }} {{ __('Currency') }}
             </span>
-        </div>
-
-
-        {{-- Price & Button --}}
-        <div class="flex items-center justify-between">
-            <button
-                class="flex items-center justify-center px-3 py-2 orange-300 mx-auto mt-auto rounded-md bg-primary-orange hover:bg-orange-600 font-semibold text-white">
-
-                <span class="text-md mr-1">
-                    {{ $course->price ?? '0' }} {{ __('course_card.currency') }}
-                </span>
-            </button>
-
-
+                <button
+                    class="px-4 py-2 bg-primary-orange hover:bg-orange-600 text-white text-sm rounded-xl transition">
+                    {{ __('Enroll Now') }}
+                </button>
+            </div>
         </div>
     </div>
-</div>
+</a>

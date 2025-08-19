@@ -1,92 +1,494 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="p-6 flex gap-6 ">
-        {{-- Left: Course Content --}}
-        <div class="flex-1 mt-4">
+    {{-- Main container for the course page --}}
+    {{-- py-8 sm:py-12 provides consistent top/bottom padding for the whole page content --}}
+    <div class="py-8 sm:py-12" x-data="courseData({{ $course->id }})"> {{-- Pass course ID to Alpine --}}
+        {{-- Max width container for central alignment --}}
+        <div class=" mx-auto px-4 sm:px-6 lg:px-8">
 
-            {{-- Breadcrumbs --}}
-            <div class="text-gray-500 text-sm mb-4">
+            <!-- Course Header Section -->
+            {{-- Enhanced shadow and explicit border for a cleaner card-like appearance --}}
+            <div class="bg-white shadow-md border border-gray-200 rounded-lg overflow-hidden mb-6 sm:mb-8">
+                <div class="px-4 py-4 sm:px-6 sm:py-5">
+                    {{-- flex-wrap ensures items stack nicely on smaller screens --}}
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <div class="flex items-center space-x-3 ">
+                            <div
+                                class="w-10 h-10 bg-primary-orange rounded-lg flex items-center justify-center flex-shrink-0">
+                                <x-tabler-school class="w-6 h-6 text-white absolute"/>
+                            </div>
+                            <div>
+                                <h1 class="text-lg sm:text-xl font-bold text-gray-900 leading-tight">{{$course->title}}</h1>
+                                <p class="text-xs text-gray-600">{{$course->description}}</p>
+                            </div>
+                        </div>
 
-
-
-                <a href="{{ route('welcome') }}"> {{ __('courses.home') }} </a>
-                >
-                <a href="{{ route('courses.index') }}"> {{ __('courses.title') }} </a>
-                >
-                {{ $course->title }}
-            </div>
-
-            {{-- Title --}}
-            <h1 class="text-4xl font-bold mb-4"> {{ $course->title }} </h1>
-
-            {{-- Video --}}
-            <div class="rounded-xl overflow-hidden shadow mb-6">
-                <img src="https://placehold.co/800x450" alt="Course Thumbnail" class="w-full">
-                <div class="bg-gray-900 text-white px-4 py-2 flex justify-between items-center">
-                    <span>⏯ 12:30 / 1:20:00</span>
-                </div>
-            </div>
-
-
-            <div class="flex items-center justify-between ">
-                {{-- Author --}}
-                <div class="flex items-center gap-3 mb-6">
-                    {{-- <img src="{{ asset($course->trainer->avatar) ?? 'https://placehold.co/50x50' }}" class="rounded-full" --}}
-                    <img src="{{ 'https://placehold.co/50x50' }}" class="rounded-full" alt="Mentor">
-                    <div>
-                        <p class="font-semibold"> {{ $course->trainer->name }} </p>
-                        <p class="text-sm text-gray-500">Mentor • {{ $course->trainer->profession }} Works at Google </p>
+                        <div class="flex items-center space-x-2 sm:space-x-4 rtl:space-x-reverse">
+                            {{-- Star rating display --}}
+                            <div class="flex items-center bg-gray-50 rounded-lg px-3 py-2 flex-shrink-0">
+                                <div class="flex text-yellow-400 text-sm" x-html="renderStars(courseRating)"></div>
+                                <span class="ml-2 rtl:ml-0 rtl:mr-2 text-sm text-gray-700 font-medium"
+                                      x-text="`${courseRating} (${totalReviews})`"></span>
+                            </div>
+                            {{-- Progress indicator --}}
+                            <div
+                                class="bg-primary-orange text-white px-2 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex-shrink-0">
+                                <span x-text="completedEpisodes"></span>/<span x-text="totalEpisodes"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- Favorite Button --}}
-                <div class="save">
-                    @auth
-                        {{-- Favorite Icon --}}
-                        <form method="POST" action="{{ route('courses.favorite.toggle', $course) }}">
-                            @csrf
-                            <button type="submit">
-                                @if ($course->isFavoritedBy(auth()->user()))
-                                    <x-heroicon-s-heart class="w-10 h-10 text-red-500" />
-                                @else
-                                    <x-heroicon-s-heart class="w-10 h-10 text-gray-500" />
-                                @endif
+            <!-- Main Content Area - Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                {{-- Left Column for Video Player and Resources --}}
+                <div class="lg:col-span-2 space-y-6 lg:space-y-8">
+                    <!-- Video Player Card -->
+                    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                        <div class="relative bg-black aspect-video">
+                            <video
+                                x-ref="videoPlayer"
+                                class="w-full h-full object-cover"
+                                controls
+                                :src="currentEpisode.url"
+                                :poster="currentEpisode.thumbnail"
+                                @ended="markCurrentEpisodeAsCompleted" {{-- Automatically mark as complete when video ends --}}
+                            >
+                                Your browser does not support the video tag.
+                            </video>
+                            {{-- Episode number overlay --}}
+                            <div
+                                class="absolute top-2 left-2 rtl:left-auto rtl:right-2 bg-black/70 text-white px-2 py-1 rounded text-xs font-semibold">
+                                Episode <span x-text="currentEpisode.number"></span>
+                            </div>
+                        </div>
 
-                            </button>
-                        </form>
-                    @endauth
+                        <!-- Video Info Section -->
+                        <div class="p-4 sm:p-6">
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 leading-tight"
+                                x-text="currentEpisode.title"></h2>
+                            <p class="text-gray-600 text-sm sm:text-base mb-4 leading-relaxed"
+                               x-text="currentEpisode.description"></p>
+
+                            @if(auth()->check() && auth()->user()->paid($course))
+                                <div
+                                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-lg p-4 gap-4">
+                                    {{-- Episode stats using a grid for better mobile alignment --}}
+                                    <div class="grid grid-cols-3 gap-4 text-sm w-full sm:w-auto">
+                                        <div class="text-center">
+                                            <div class="font-bold text-primary-orange"
+                                                 x-text="currentEpisode.duration"></div>
+                                            <div class="text-xs text-gray-500">Duration</div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Mark Complete button --}}
+                                    <button
+                                        @click="toggleCompleted(currentEpisode.id)"
+                                        :class="currentEpisode.completed ? 'bg-green-600 hover:bg-green-700' : 'bg-primary-orange hover:bg-orange-700'"
+                                        class="w-full sm:w-auto px-4 py-2 text-white rounded-lg transition-colors font-semibold text-sm flex items-center justify-center
+                                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-orange"
+                                    >
+                                        <template x-if="currentEpisode.completed">
+                                            <x-tabler-check class="mr-2 rtl:mr-0 rtl:ml-2"/>
+                                        </template>
+                                        <template x-if="!currentEpisode.completed">
+                                            <x-tabler-player-play class="mr-2 rtl:mr-0 rtl:ml-2"/>
+                                        </template>
+                                        <span
+                                            x-text="currentEpisode.completed ? 'Mark as not completed' : 'Mark Complete'"></span>
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Course Resources Section -->
+                    @if(auth()->check() && auth()->user()->paid($course))
+
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 sm:p-6">
+                            <div class="flex items-center mb-4">
+                                <div
+                                    class="w-10 h-10 bg-accent-blue rounded-lg flex items-center justify-center mr-3 rtl:mr-0 rtl:ml-3 flex-shrink-0">
+                                    <x-tabler-file-download class="w-6 h-6 "/>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-900 leading-tight">{{__('Course Resources')}}</h3>
+                                    <p class="text-sm text-gray-600">{{__('Download materials and source code')}}</p>
+                                </div>
+                            </div>
+
+                            {{-- Use currentEpisodeResources() for iterating --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                                 x-show="currentEpisodeResources().length > 0">
+                                <template x-for="file in currentEpisodeResources()"
+                                          :key="file.uuid"> {{-- Use file.uuid for unique key --}}
+                                    {{-- Using <a> tag for semantic correctness of a download link --}}
+                                    <a :href="file.original_url" @click.prevent="downloadFile(file)"
+                                       class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors flex items-center justify-between
+                                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-orange"
+                                    >
+                                        <div class="flex items-center min-w-0 flex-1">
+                                            <div
+                                                class="w-8 h-8 rounded flex items-center justify-center mr-3 rtl:mr-0 rtl:ml-3 flex-shrink-0">
+                                                {{-- Use dynamic icon based on file type --}}
+                                                <div class="w-full h-full rounded flex items-center justify-center">
+                                                    <x-tabler-file-type-pdf class="w-6 h-6 "/>
+                                                </div>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <p class="font-semibold text-gray-900 text-sm truncate"
+                                                   x-text="file.name"></p>
+                                                {{-- Display size, convert bytes to KB/MB --}}
+                                                <p class="text-xs text-gray-500"
+                                                   x-text="`${(file.size / 1024 / 1024).toFixed(2)} MB`"></p>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="bg-primary-orange hover:bg-orange-700 text-white p-2 rounded transition-colors flex-shrink-0 ml-2 rtl:ml-0 rtl:mr-2"
+                                            aria-label="Download file"
+                                        >
+                                            <x-tabler-file-download class="w-4 h-4"/>
+                                        </div>
+                                    </a>
+                                </template>
+                            </div>
+                            <div x-show="currentEpisodeResources().length === 0" class="text-gray-600 text-center py-4">
+                                {{__('No resources available for this episode.')}}
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Sidebar / Episode List -->
+                <div class="lg:col-span-1">
+                    {{-- Sticky positioning for the sidebar on larger screens --}}
+                    <div
+                        class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden lg:sticky lg:top-8">
+                        <div class="bg-primary-orange text-white p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-lg">{{__('Course Episodes')}}</h3>
+                                    <p class="text-orange-100 text-sm">
+                                        <span x-text="totalEpisodes"></span> {{__('episodes')}} • <span
+                                            x-text="totalDuration"></span>
+                                    </p>
+                                </div>
+                                <div class="w-8 h-8 bg-white/20 rounded flex items-center justify-center flex-shrink-0">
+                                    <x-tabler-list class="w-6 h-6 text-white "/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Episodes List -->
+                        {{-- Custom scrollbar styling added for better appearance --}}
+                        <div class="max-h-96 lg:max-h-[calc(100vh-200px)] overflow-y-auto custom-scrollbar">
+                            <template x-for="(episode, index) in episodes" :key="episode.id">
+                                <div class="border-b border-gray-100 last:border-b-0">
+                                    <button
+                                        :disabled="episode.locked" {{-- Disable based on the 'locked' key --}}
+                                    @click="playEpisode(episode)"
+                                        :class="{
+                                            'cursor-not-allowed bg-gray-50 opacity-75': episode.locked,
+                                            'hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:ring-offset-2': !episode.locked,
+                                            'bg-gray-100': currentEpisode.id === episode.id && !episode.locked // Highlight current episode
+                                        }"
+                                        class="w-full p-4 text-left transition-colors"
+                                    >
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 mr-3 rtl:mr-0 rtl:ml-3">
+                                                <div
+                                                    :class="{
+                                                        'bg-green-600': episode.completed, // Green if completed
+                                                        'bg-primary-orange': !episode.completed && !episode.locked, // Orange if not completed and not locked
+                                                        'bg-gray-300': episode.locked // Gray if locked
+                                                    }"
+                                                    class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs"
+                                                >
+                                                    <template x-if="episode.completed">
+                                                        <x-tabler-check class="w-4 h-4 text-white"/>
+                                                    </template>
+                                                    <template x-if="!episode.completed && !episode.locked">
+                                                        <span x-text="episode.number"></span>
+                                                    </template>
+                                                    <template x-if="episode.locked">
+                                                        <x-tabler-lock class="w-4 h-4 text-white"/>
+                                                    </template>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex items-start justify-between mb-1">
+                                                    <h4
+                                                        :class="episode.locked ? 'text-gray-500' : 'text-gray-900 font-semibold'"
+                                                        {{-- Gray out text if locked --}}
+                                                        class="text-sm leading-tight pr-2 rtl:pr-0 rtl:pl-2 line-clamp-2"
+                                                        x-text="episode.title"
+                                                    ></h4>
+                                                </div>
+
+                                                <div
+                                                    :class="episode.locked ? 'text-gray-400' : 'text-gray-500'"
+                                                    {{-- Gray out duration if locked --}}
+                                                    class="flex items-center justify-between text-xs"
+                                                >
+                                                    <span class="font-medium" x-text="episode.duration"></span>
+                                                    <template
+                                                        x-if="episode.locked"> {{-- Only show "Locked" text and icon if truly locked --}}
+                                                        <div class="flex items-center ml-2 text-gray-500">
+                                                            <x-tabler-lock class="w-4 h-4 mr-1"/>
+                                                            <span>{{__('Locked')}}</span>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Call to Action for non-enrolled users -->
+                        @if(auth()->check() && !auth()->user()->paid($course))
+                            <div class="p-4 bg-gray-50 border-t border-gray-100 text-center">
+                                <p class="text-sm text-gray-700 mb-3">{{__('Enroll now to unlock all episodes and track your progress!')}}</p>
+                                <form action="{{ route('courses.purchase.course', $course) }}" method="post">
+                                    @csrf
+                                    <button type="submit"
+                                            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-orange hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-orange">
+                                        {{__('Purchase this Courses')}}
+                                    </button>
+                                </form>
+                            </div>
+                        @elseif(!auth()->check())
+                            <div class="p-4 bg-gray-50 border-t border-gray-100 text-center">
+                                <p class="text-sm text-gray-700 mb-3">{{__('Please log in to enroll and access course content.')}}</p>
+                                <a href="{{ route('login') }}"
+                                   class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-orange hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-orange">
+                                    {{__('Login')}}
+                                </a>
+                            </div>
+                        @endif
+
+                    </div>
                 </div>
             </div>
-
-            {{-- About --}}
-            <div class="mb-6">
-                <h2 class="font-bold text-lg mb-2">About This Course</h2>
-                <p class="text-gray-700">
-                    Unlock your creative potential with our Beginner-Level Illustrator Course! ...
-                    {{ $course->description }}
-                </p>
-            </div>
-
-            {{-- Suit For --}}
-            <div>
-                <h2 class="font-bold text-lg mb-2">This Course Suit For:</h2>
-                <ul class="list-disc pl-6 mr-3 text-gray-700 space-y-1">
-                    <li>Anyone who wants to start their career ...</li>
-                    <li>This course is for beginners ...</li>
-                    <li>For anyone who needs to add Illustration ...</li>
-                    <li>Aimed at people new to the world ...</li>
-                </ul>
-            </div>
-
-            {{-- <x-buy-course-card :course="$course" /> --}}
-
-            <x-accordion :course="$course" />
         </div>
 
-        {{-- Right: Progress + Lessons --}}
-        <x-buy-course-card :course="$course" />
+        <!-- Custom Scrollbar Styling (add this to your main CSS file for production) -->
+        <style>
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+            }
 
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
 
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 10px;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+            /* For Firefox */
+            .custom-scrollbar {
+                scrollbar-width: thin;
+                scrollbar-color: #888 #f1f1f1;
+            }
+        </style>
+
+        <!-- Alpine.js Data & Logic -->
+        <script>
+            function courseData(courseId) {
+                return {
+                    courseId: courseId,
+                    courseRating: 4.9,
+                    totalReviews: 2847,
+                    completedEpisodes: 0,
+                    totalEpisodes: 0,
+                    totalDuration: "0h 0m",
+                    currentEpisode: {},
+                    episodes: @json($episodes),
+
+                    init() {
+                        this.episodes = this.episodes.map(episode => ({
+                            ...episode,
+                            completed: false // Initialize 'completed' property for each episode
+                        }));
+
+                        this.totalEpisodes = this.episodes.length;
+                        this.calculateTotalDuration();
+                        this.loadProgress(); // Load progress AFTER initializing 'completed' property
+                        this.updateProgress();
+
+                        // Set the first episode as current by default, or an empty object if no episodes
+                        if (this.episodes.length > 0) {
+                            // Find the first uncompleted episode, or default to the first one if all are completed
+                            let firstUncompletedEpisode = this.episodes.find(e => !e.completed);
+                            this.currentEpisode = {...(firstUncompletedEpisode || this.episodes[0])};
+                            // Ensure resources are an array for iteration
+                            this.currentEpisode.resources = Object.values(this.currentEpisode.resources || {});
+                        } else {
+                            this.currentEpisode = {resources: []};
+                        }
+                    },
+
+                    // Helper to generate the localStorage key
+                    getStorageKey() {
+                        // Use a key unique per user if authentication status is known and user is logged in
+                        // For a public course, a common key or per-course key is fine.
+                        // For user-specific progress, consider `course_progress_${this.courseId}_${userId}`
+                        return `course_progress_${this.courseId}`;
+                    },
+
+                    // Saves the completed status of episodes to localStorage
+                    saveProgress() {
+                        try {
+                            const completedStatuses = this.episodes.map(e => ({
+                                id: e.id,
+                                completed: e.completed
+                            }));
+                            localStorage.setItem(this.getStorageKey(), JSON.stringify(completedStatuses));
+                        } catch (e) {
+                            console.error("Failed to save progress to localStorage:", e);
+                        }
+                    },
+
+                    // Loads completed status from localStorage and applies it to episodes
+                    loadProgress() {
+                        try {
+                            const storedProgress = localStorage.getItem(this.getStorageKey());
+                            if (storedProgress) {
+                                const completedStatuses = JSON.parse(storedProgress);
+                                completedStatuses.forEach(storedEp => {
+                                    const episode = this.episodes.find(e => e.id === storedEp.id);
+                                    if (episode) {
+                                        // Update the reactive property directly
+                                        episode.completed = storedEp.completed || false;
+                                    }
+                                });
+                            }
+                        } catch (e) {
+                            console.error("Failed to load progress from localStorage:", e);
+                            // Clear corrupted data if parsing fails
+                            localStorage.removeItem(this.getStorageKey());
+                        }
+                    },
+
+                    calculateTotalDuration() {
+                        let totalSeconds = 0;
+                        this.episodes.forEach(episode => {
+                            const parts = episode.duration.split(':').map(Number);
+                            if (parts.length === 3) { // HH:MM:SS
+                                totalSeconds += parts[0] * 3600 + parts[1] * 60 + parts[2];
+                            } else if (parts.length === 2) { // MM:SS
+                                totalSeconds += parts[0] * 60 + parts[1];
+                            }
+                        });
+
+                        const hours = Math.floor(totalSeconds / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        this.totalDuration = `${hours}h ${minutes}m`;
+                    },
+
+                    updateProgress() {
+                        this.completedEpisodes = this.episodes.filter(e => e.completed).length;
+                    },
+
+                    playEpisode(episode) {
+                        if (episode.locked) {
+                            // Optionally show a message or do nothing if episode is locked
+                            return;
+                        }
+                        this.currentEpisode = {...episode};
+                        this.currentEpisode.resources = Object.values(this.currentEpisode.resources || {});
+
+                        this.$nextTick(() => {
+                            if (this.$refs.videoPlayer) {
+                                this.$refs.videoPlayer.scrollIntoView({behavior: 'smooth', block: 'start'});
+                                this.$refs.videoPlayer.load(); // Load the new video source
+                                this.$refs.videoPlayer.play();
+                            }
+                        });
+                    },
+
+                    markCurrentEpisodeAsCompleted() {
+                        // Find the actual episode object in the 'episodes' array to ensure reactivity
+                        const episodeToUpdate = this.episodes.find(e => e.id === this.currentEpisode.id);
+
+                        if (episodeToUpdate && !episodeToUpdate.completed) {
+                            episodeToUpdate.completed = true; // Mark as completed in the main array
+                            this.currentEpisode.completed = true; // Also update the currentEpisode object
+                            this.updateProgress();
+                            this.saveProgress();
+
+                            // Optional: Auto-play next episode if not the last one and not locked
+                            const currentIndex = this.episodes.findIndex(e => e.id === this.currentEpisode.id);
+                            const nextEpisodeIndex = currentIndex + 1;
+                            if (nextEpisodeIndex < this.episodes.length) {
+                                const nextEpisode = this.episodes[nextEpisodeIndex];
+                                if (!nextEpisode.locked) { // Only auto-play if the next episode is not locked
+                                    this.playEpisode(nextEpisode);
+                                }
+                            }
+                        }
+                    },
+
+                    toggleCompleted(episodeId) {
+                        const episode = this.episodes.find(e => e.id === episodeId);
+                        if (episode) {
+                            episode.completed = !episode.completed; // Toggle the completed status
+                            // If the toggled episode is the one currently playing, update its status as well
+                            if (this.currentEpisode.id === episodeId) {
+                                this.currentEpisode.completed = episode.completed;
+                            }
+                            this.updateProgress();
+                            this.saveProgress();
+                        }
+                    },
+
+                    renderStars(rating) {
+                        const fullStars = Math.floor(rating);
+                        const hasHalfStar = rating % 1 !== 0;
+                        let stars = '';
+                        // Font Awesome icons assuming you have them linked (e.g., via CDN in layouts.app)
+                        for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+                        if (hasHalfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+                        const emptyStars = 5 - Math.ceil(rating);
+                        for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
+                        return stars;
+                    },
+
+                    // File icons are hardcoded in the blade, but if you wanted dynamic icons based on extension
+                    // you would use something like this in the template: :class="getFileIcon(file)" and :class="getFileIconBg(file)"
+                    getFileIcon(file) {
+                        const extension = file.extension.toLowerCase();
+                        if (extension.includes('pdf')) return 'x-tabler-file-type-pdf';
+                        if (['zip', 'rar', '7z'].includes(extension)) return 'x-tabler-file-zip';
+                        if (['doc', 'docx'].includes(extension)) return 'x-tabler-file-type-doc';
+                        if (['xls', 'xlsx'].includes(extension)) return 'x-tabler-file-type-xls';
+                        if (['ppt', 'pptx'].includes(extension)) return 'x-tabler-file-type-ppt';
+                        if (['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(extension)) return 'x-tabler-file-type-image';
+                        // Add more as needed
+                        return 'x-tabler-file'; // Default icon
+                    },
+
+                    downloadFile(file) {
+                        window.open(file.original_url, '_blank');
+                    },
+
+                    currentEpisodeResources() {
+                        return this.currentEpisode.resources || [];
+                    }
+                }
+            }
+        </script>
     </div>
 @endsection

@@ -5,8 +5,15 @@ module.exports = {
     './resources/css/**/*.css',
     './resources/js/**/*.js',
   ],
-  theme: {
-
-  },
+    theme: {
+        extend: {
+            colors: {
+                'primary-orange': '#f97316',
+                'orange-hover': '#ea580c',
+                'accent-blue': '#3b82f6',
+                'accent-indigo': '#6366f1'
+            }
+        }
+    },
   plugins: [],
 };

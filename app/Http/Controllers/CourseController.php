@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Section;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use FFMpeg\FFProbe;
+use getID3;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -60,8 +62,50 @@ class CourseController extends Controller
         ]);
 
         $course->append('average_rating');
+        //boolean that is false if the viwer is guest or user that didnt purchase the course
+        $locked = auth()->check() && auth()->user()->paid($course);
+        $episodes = $course->sections->map(function ($section) use ($locked) {
+            $video = $section->getFirstMediaPath('resources_video');
+//            dd($video);
+            $getID3 = new getID3;
+            $info = $getID3->analyze($video);
+            $duration = $info['playtime_string'] ?? '00:00:00';
+            return [
+                'id' => $section->id,
+                'number' => $section->order,
+                'title' => $section->title,
+                'duration' => $duration,
+                'completed' => $section->completed,
+                'url' => $section->getFirstMediaUrl('resources_video'),
+                'thumbnail' => $section->getFirstMediaUrl('resources_thumb'),
+                'description' => $section->description,
+                'resources' => $section->getMedia('resources'),
+                'locked' => !$locked
+            ];
+        });
 
-        return view('courses.show', compact('course'));
+        // dd the trailer to the eposides and its not locked
+        $trailer = $course->getFirstMediaUrl('promotional_videos');
+        $trailer_thumbnail = $course->getFirstMediaUrl('thumbnails');
+        $getID3 = new getID3;
+        $info = $getID3->analyze($trailer);
+        $trailer_duration = $info['playtime_string'] ?? '00:00:00';
+        $trailer = [
+            'id' => 0, // Assuming trailer is not a section, so id is 0
+            'number' => 0, // Trailer does not have a section number
+            'title' => __('Trailer'),
+            'duration' => $trailer_duration,
+            'completed' => false, // Trailer is not completed
+            'url' => $trailer,
+            'thumbnail' => $trailer_thumbnail,
+            'description' => $course->description,
+            'resources' => [],
+            'locked' => false
+        ];
+        $episodes = collect([$trailer])->merge($episodes)->sortBy('number')->values()->all();
+
+//        dd($episodes);
+        return view('courses.show', compact('course', 'episodes'));
     }
 
     /**
@@ -102,7 +146,6 @@ class CourseController extends Controller
             return redirect()->back()->withErrors(['message' => __('You are already enrolled in this course.')]);
         }
 
-        $user->enroll($course);
 
         return redirect()->back()->with('message', __('You have successfully enrolled in the course.'));
     }
@@ -154,4 +197,6 @@ class CourseController extends Controller
         flash()->success(__('Course rated successfully.'));
         return redirect()->back()->with('message', __('Course rated successfully.'));
     }
+
+
 }
