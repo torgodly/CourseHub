@@ -45,7 +45,7 @@ Route::prefix('courses')->name('courses.')->group(function () {
 Route::prefix('profile')->middleware('auth')->name('profile.')->group(function () { // done
     Route::get('/', [UserController::class, 'show'])->name('show');
     Route::post('update', [UserController::class, 'update'])->name('update');
-    Route::post('password', [UserController::class, 'updatePassword'])->name('password');
+    Route::post('password', [UserController::class, 'updatePassword'])->name('password.update');
 });
 
 // Trainer Application

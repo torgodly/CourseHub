@@ -14,11 +14,18 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $request->user()->id,
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $avatarPath;
+        }
         $request->user()->update($data);
 
         return redirect()->route('profile.show')->with('success', __('Profile updated successfully.'));

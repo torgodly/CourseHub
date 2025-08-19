@@ -25,18 +25,18 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
+//    public function update(ProfileUpdateRequest $request): RedirectResponse
+//    {
+//        $request->user()->fill($request->validated());
+//
+//        if ($request->user()->isDirty('email')) {
+//            $request->user()->email_verified_at = null;
+//        }
+//
+//        $request->user()->save();
+//
+//        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+//    }
 
     /**
      * Delete the user's account.
@@ -65,29 +65,27 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . Auth::id(),
-            'password' => 'nullable|min:8',
             'avatar' => 'nullable|image|max:2048',
         ]);
 
         $user = Auth::user();
-
-        // Update email
-        $user->email = $request->email;
-
-        // Update password if provided
-        if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
-        }
-
-        // Update avatar if provided
+        //store avatar if provided
         if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = Storage::url($avatarPath);
+            // Delete old avatar if exists
+            if ($user->avatar) {
+                Storage::delete($user->avatar);
+            }
+            // Store new avatar
+            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+            $user->save();
         }
 
-        $user->save();
-
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+        ]);
         return redirect()->route('profile.edit')->with('success', 'تم تحديث الملف الشخصي بنجاح.');
     }
 }

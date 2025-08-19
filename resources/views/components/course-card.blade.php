@@ -42,16 +42,17 @@
                     </span>
                     @empty
                     @endforelse
-                        @php
-                            $levelClasses = [
-                                'Beginner' => 'text-green-800 bg-green-100',
-                                'Intermediate' => 'text-yellow-800 bg-yellow-100',
-                                'Advanced' => 'text-red-800 bg-red-100',
-                            ];
-                            $levelKey = $course->level->name; // or ->value depending on your enum
-                        @endphp
+                    @php
+                        $levelClasses = [
+                            'Beginner' => 'text-green-800 bg-green-100',
+                            'Intermediate' => 'text-yellow-800 bg-yellow-100',
+                            'Advanced' => 'text-red-800 bg-red-100',
+                        ];
+                        $levelKey = $course->level->name; // or ->value depending on your enum
+                    @endphp
 
-                        <span class="text-xs px-2 py-1 rounded-full {{ $levelClasses[$levelKey] ?? 'text-gray-700 bg-gray-100' }}">
+                    <span
+                        class="text-xs px-2 py-1 rounded-full {{ $levelClasses[$levelKey] ?? 'text-gray-700 bg-gray-100' }}">
     {{ $course->level->getLabel() ?? __('Not specified') }}
 </span>
 
@@ -87,10 +88,20 @@
             <span class="text-indigo-600 font-bold text-lg">
                 {{ $course->price ?? '0' }} {{ __('Currency') }}
             </span>
-                <button
-                    class="px-4 py-2 bg-primary-orange hover:bg-orange-600 text-white text-sm rounded-xl transition">
-                    {{ __('Enroll Now') }}
-                </button>
+                @if(auth()->check() && auth()->user()->paid($course))
+
+                    <button
+                        class="px-4 py-2 bg-primary-orange hover:bg-orange-600 text-white text-sm rounded-xl transition">
+                        {{ __('Continue Studying') }}
+
+                    </button>
+                @else
+                    <button
+                        class="px-4 py-2 bg-primary-orange hover:bg-orange-600 text-white text-sm rounded-xl transition">
+                        {{ __('Enroll Now') }}
+                    </button>
+                @endif
+
             </div>
         </div>
     </div>

@@ -17,9 +17,13 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $tab = $request->get('tab', 'all'); // default: all
-
+        $search = $request->get('search');
 
         $query = Course::query()->with('trainer');
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
 
         switch ($tab) {
             case 'new':

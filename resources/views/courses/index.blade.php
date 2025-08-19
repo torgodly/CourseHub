@@ -5,9 +5,9 @@
 
         {{-- Title & Description --}}
         <div class="text-center mb-8">
-            <h1 class="text-2xl text-primary-orange font-bold mb-2">{{ __('courses.title') }}</h1>
+            <h1 class="text-2xl text-primary-orange font-bold mb-2">{{ __('Courses') }}</h1>
             <p class="text-gray-600 max-w-2xl mx-auto">
-                {{ __('courses.description') }}
+                {{ __('Explore our wide range of courses designed to help you learn and grow in your field. Whether you are looking to enhance your skills or start a new career, we have something for everyone.') }}
             </p>
         </div>
 
