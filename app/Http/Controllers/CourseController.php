@@ -19,7 +19,7 @@ class CourseController extends Controller
         $tab = $request->get('tab', 'all'); // default: all
         $search = $request->get('search');
 
-        $query = Course::query()->with('trainer');
+        $query = Course::query()->with('trainer')->orderBy('created_at', 'desc');
         if ($search) {
             $query->where('title', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%');
