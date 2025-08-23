@@ -11,7 +11,7 @@ class WalletController extends Controller
     {
         $user = auth()->user();
         $wallet = $user->wallet; // Assuming you have a wallet relationship on the User model
-        $wallet->load('transactions');
+        // $wallet->load('transactions');
 
         return view('wallet.index', compact('wallet'));
     }

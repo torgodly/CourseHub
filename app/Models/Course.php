@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
@@ -86,5 +87,22 @@ class Course extends Model implements HasMedia, ProductLimitedInterface
         return round($this->ratings()->avg('course_user_ratings.rating'), 1);
     }
 
+
+
+public function favoritedBy()
+{
+    return $this->belongsToMany(User::class, 'course_user_favorites');
+}
+
+public function isFavoritedBy(?User $user): bool
+{
+    if (!$user) {
+        return false; // Not logged in
+    }
+
+    return $this->favoritedBy()
+        ->where('user_id', $user->id)
+        ->exists();
+}
 
 }

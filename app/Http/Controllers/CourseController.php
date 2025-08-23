@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Section;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use FFMpeg\FFProbe;
+use getID3;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -12,10 +14,42 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::all();
-        return view('courses.index', compact('courses'));
+        $tab = $request->get('tab', 'all'); // default: all
+        $search = $request->get('search');
+
+        $query = Course::query()->with('trainer')->orderBy('created_at', 'desc');
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+
+        switch ($tab) {
+            case 'new':
+                $query = $query->orderBy('created_at', 'desc');
+                break;
+
+            case 'popular':
+                $query = $query->orderBy('created_at', 'asc'); // or 'students_count' if you track that
+                break;
+
+            case 'specialties':
+                $query = $query->whereNotNull('level'); // example condition
+                break;
+
+            case 'all':
+            default:
+                // no extra filtering
+                break;
+        }
+
+        $courses = $query->paginate(14);
+
+        return view('courses.index', [
+            'courses' => $courses,
+            'active' => $tab,
+        ]);
     }
 
     /**
@@ -32,8 +66,50 @@ class CourseController extends Controller
         ]);
 
         $course->append('average_rating');
+        //boolean that is false if the viwer is guest or user that didnt purchase the course
+        $locked = auth()->check() && auth()->user()->paid($course);
+        $episodes = $course->sections->map(function ($section) use ($locked) {
+            $video = $section->getFirstMediaPath('resources_video');
+//            dd($video);
+            $getID3 = new getID3;
+            $info = $getID3->analyze($video);
+            $duration = $info['playtime_string'] ?? '00:00:00';
+            return [
+                'id' => $section->id,
+                'number' => $section->order,
+                'title' => $section->title,
+                'duration' => $duration,
+                'completed' => $section->completed,
+                'url' => $section->getFirstMediaUrl('resources_video'),
+                'thumbnail' => $section->getFirstMediaUrl('resources_thumb'),
+                'description' => $section->description,
+                'resources' => $section->getMedia('resources'),
+                'locked' => !$locked
+            ];
+        });
 
-        return view('courses.show', compact('course'));
+        // dd the trailer to the eposides and its not locked
+        $trailer = $course->getFirstMediaUrl('promotional_videos');
+        $trailer_thumbnail = $course->getFirstMediaUrl('thumbnails');
+        $getID3 = new getID3;
+        $info = $getID3->analyze($trailer);
+        $trailer_duration = $info['playtime_string'] ?? '00:00:00';
+        $trailer = [
+            'id' => 0, // Assuming trailer is not a section, so id is 0
+            'number' => 0, // Trailer does not have a section number
+            'title' => __('Trailer'),
+            'duration' => $trailer_duration,
+            'completed' => false, // Trailer is not completed
+            'url' => $trailer,
+            'thumbnail' => $trailer_thumbnail,
+            'description' => $course->description,
+            'resources' => [],
+            'locked' => false
+        ];
+        $episodes = collect([$trailer])->merge($episodes)->sortBy('number')->values()->all();
+
+//        dd($episodes);
+        return view('courses.show', compact('course', 'episodes'));
     }
 
     /**
@@ -45,13 +121,17 @@ class CourseController extends Controller
         $user = auth()->user();
 
         if ($user->paid($course)) {
+            flash()->error(__('You have already purchased this course.'));
             return redirect()->back()->withErrors(['message' => __('You have already purchased this course.')]);
         }
 
         if ($user->safePay($course)) {
+            flash()->success(__('You have purchased this course successfully!'));
+            $user->enroll($course);
             return redirect()->back()->with('message', __('You have purchased this course successfully!'));
         }
 
+        flash()->error(__("Purchase failed: Don't have enough balance."));
         return redirect()->back()->withErrors(['message' => __('Purchase failed.')]);
     }
 
@@ -70,7 +150,6 @@ class CourseController extends Controller
             return redirect()->back()->withErrors(['message' => __('You are already enrolled in this course.')]);
         }
 
-        $user->enroll($course);
 
         return redirect()->back()->with('message', __('You have successfully enrolled in the course.'));
     }
@@ -89,12 +168,19 @@ class CourseController extends Controller
      */
     public function toggleFavorite(Request $request, Course $course)
     {
+
         $user = auth()->user();
 
         if ($user->favorites()->toggle($course->id)) {
+            if ($user->favorites()->where('course_id', $course->id)->exists()) {
+                flash()->success(__('Course added to favorite.'));
+            } else {
+                flash()->info(__('Course removed from favorite.'));
+            }
             return redirect()->back()->with('message', __('Course favorite status updated.'));
         }
 
+        flash()->error(__('Failed to update course favorite status.'));
         return redirect()->back()->withErrors(['message' => __('Failed to update course favorite status.')]);
     }
 
@@ -112,7 +198,9 @@ class CourseController extends Controller
         $user->ratedCourses()->syncWithoutDetaching([
             $course->id => ['rating' => $request->rating],
         ]);
-
+        flash()->success(__('Course rated successfully.'));
         return redirect()->back()->with('message', __('Course rated successfully.'));
     }
+
+
 }

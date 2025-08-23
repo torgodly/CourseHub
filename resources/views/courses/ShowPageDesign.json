@@ -1,0 +1,186 @@
+{
+  "componentName": "CourseDetailsPageWithoutNav",
+  "description": "A focused course details page, featuring course overview, curriculum, and pricing, with the navigation bar and calendar removed for a streamlined view.",
+  "props": {
+    "courseTitle": "Self Positioning",
+    "courseTag": "Self Positioning",
+    "courseReviews": "43,240 Attended this course",
+    "isRegistered": true,
+    "upcomingCourseDate": "24 Dec, 2022",
+    "price": "£ 4,500",
+    "courseIncludes": [
+      "2 days a week active training from 6:00PM - 11:00PM",
+      "Downloadable digital version of 8 meditation audios",
+      "Downloadable digital presentation - course guide"
+    ],
+    "courseDuration": "12 days - 240 hours total",
+    "courseCurriculum": [
+      {
+        "day": 1,
+        "topic": "Welcome, Welcome, Welcome",
+        "duration": "6hrs",
+        "time": "7:00PM - 11:00PM"
+      },
+      {
+        "day": 2,
+        "topic": "Who's Carl Jung? What are archetypes?",
+        "duration": "6hrs",
+        "time": "7:00PM - 11:00PM"
+      },
+      {
+        "day": 3,
+        "topic": "First Quadrant: Princess, Prince",
+        "duration": "6hrs",
+        "time": "7:00PM - 11:00PM"
+      },
+      {
+        "day": 4,
+        "topic": "First Quadrant: Hermes, Aphrodite",
+        "duration": "6hrs",
+        "time": "7:00PM - 11:00PM"
+      },
+      {
+        "day": 5,
+        "topic": "Second Quadrant: Blacksmith, Priest",
+        "duration": "6hrs",
+        "time": "7:00PM - 11:00PM"
+      },
+      {
+        "day": 6,
+        "topic": "Second Quadrant: Dark Hage, Hekate",
+        "duration": "6hrs",
+        "time": "7:00PM - 11:00PM"
+      },
+      {
+        "day": 7,
+        "topic": "Third Quadrant: Athena, Ares",
+        "duration": "6hrs",
+        "time": "7:00PM - 11:00PM"
+      }
+    ],
+    "courseDescription": "Conque oeneon et venenatis proserent posuere euismod enim. Massa sagittis vitae tristique ipsum bibendum. Tellus..."
+  },
+  "structure": {
+    "header": {
+      "type": "div",
+      "className": "page-header",
+      "children": [
+        "Site logo",
+        "Language selector (ENG)",
+        "User profile icons (notification, saved, profile)"
+      ]
+    },
+    "mainContent": {
+      "type": "div",
+      "className": "main-container",
+      "children": [
+        {
+          "type": "div",
+          "className": "course-details-section",
+          "children": [
+            "Breadcrumbs (Home > Courses > Self Positioning)",
+            {
+              "type": "h1",
+              "text": "Self Positioning"
+            },
+            {
+              "type": "div",
+              "className": "course-stats",
+              "children": [
+                "43,240 Attended this course",
+                "8 Registered on upcoming course"
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Archetypes course was a game changer for me...",
+              "className": "course-quote"
+            },
+            {
+              "type": "div",
+              "className": "upcoming-date",
+              "text": "Upcoming course date: 24 Dec, 2022"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "className": "trust-section",
+          "children": [
+            "This courses are trusted by this companies",
+            "List of company logos (Google Adsense, Google, Android, Google Domains)"
+          ]
+        },
+        {
+          "type": "div",
+          "className": "course-curriculum-section",
+          "children": [
+            {
+              "type": "h2",
+              "text": "Course guide"
+            },
+            {
+              "type": "div",
+              "className": "curriculum-list",
+              "children": [
+                {
+                  "type": "div",
+                  "className": "day-item",
+                  "data": "Day 1: Welcome, Welcome, Welcome"
+                },
+                {
+                  "type": "div",
+                  "className": "day-item",
+                  "data": "Day 2: Who's Carl Jung?..."
+                },
+                "...",
+                "more day-item components"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "className": "course-description",
+          "children": [
+            {
+              "type": "h2",
+              "text": "Description"
+            },
+            {
+              "type": "p",
+              "text": "Conque oeneon et venenatis proserent posuere euismod enim..."
+            }
+          ]
+        }
+      ]
+    },
+    "sidebar": {
+      "type": "div",
+      "className": "course-summary-sidebar",
+      "children": [
+        {
+          "type": "div",
+          "className": "video-preview-card",
+          "children": [
+            "Video thumbnail with play button",
+            "Price",
+            "Add to cart button",
+            "Buy now button"
+          ]
+        },
+        {
+          "type": "div",
+          "className": "course-inclusions",
+          "children": [
+            {
+              "type": "h3",
+              "text": "This course includes"
+            },
+            "List of bullet points with icons"
+          ]
+        }
+      ]
+    }
+  }
+}

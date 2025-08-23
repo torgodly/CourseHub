@@ -66,9 +66,11 @@ class CourseResource extends Resource
                                             ->required(),
 
                                         Forms\Components\TagsInput::make('requirements')
+                                            ->required()
                                             ->translateLabel(),
 
                                         Forms\Components\TagsInput::make('learn_goals')
+                                            ->required()
                                             ->translateLabel(),
                                     ]),
 
@@ -111,14 +113,12 @@ class CourseResource extends Resource
                                     ->translateLabel()
                                     ->image()
                                     ->required()
-                                    ->maxSize(1024)
                                     ->columnSpanFull(),
                                 Forms\Components\SpatieMediaLibraryFileUpload::make('video')
                                     ->collection('promotional_videos')
                                     ->translateLabel()
                                     ->acceptedFileTypes(['video/mp4'])
                                     ->required()
-                                    ->maxSize(10240)
                                     ->columnSpanFull(),
                             ]),
                     ])->columnSpan(1),

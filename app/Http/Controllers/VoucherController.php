@@ -29,6 +29,6 @@ class VoucherController extends Controller
         // Redeem the voucher
         $voucher->redeem($user);
 
-        return redirect()->route('profile.show')->with('success', __('Voucher redeemed successfully.'));
+        return redirect()->route('wallet.index')->with('success', __('Voucher redeemed successfully.'));
     }
 }

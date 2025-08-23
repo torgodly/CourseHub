@@ -10,5 +10,14 @@ class PurchasedCourseController extends Controller
     //
     public function index()
     {
+        $user = auth()->user();
+        $purchasedCourses = $user->enrollments()
+            // ->where('status', \App\Enum\EnrollmentStatus::Completed->value)
+            ->with('course')
+            ->get()
+            ->map(function ($enrollment) {
+                return $enrollment->course;
+            });
+        return view('purchasedCourse.index', compact('purchasedCourses'));
     }
 }
