@@ -21,26 +21,24 @@
 <header class="shadow-lg fixed top-0 right-0 left-0 z-50 bg-white" x-data="{ open: false }">
     <div class="container mx-auto h-20 px-4 pt-3 flex items-center justify-between">
         {{-- Logo --}}
-        <a href="/" class="relative -top-2">
-            <img src="{{ asset('images/Red AFAQ Logo Ver.png') }}" alt="AFAQ logo" class="w-28 h-auto md:w-36">
-        </a>
-
-        {{-- Desktop Navigation (hidden on mobile) --}}
-        <div class="hidden md:flex items-center gap-x-8">
-            <a href=""
-               class="text-[#333] font-bold active:underline active:decoration-20 active:underline-offset-8 active:decoration-primary-orange hover:text-primary-orange">{{ __('Categories') }}</a>
-        </div>
-
-        {{-- Language Switcher (hidden on mobile) --}}
-        <div class="hidden md:flex items-center gap-x-6">
-            <a href="{{ route('lang.switch', 'en') }}"
-               class="{{ app()->getLocale() === 'en' ? 'font-bold underline' : '' }}">
-                English
+        <div class="flex gap-3 justify-center items-center">
+            <a href="/" class="relative -top-2">
+                <img src="{{ asset('images/Red AFAQ Logo Ver.png') }}" alt="AFAQ logo" class="w-28 h-auto md:w-36">
             </a>
-            <a href="{{ route('lang.switch', 'ar') }}"
-               class="{{ app()->getLocale() === 'ar' ? 'font-bold underline' : '' }}">
-                العربية
-            </a>
+
+            {{-- Desktop Navigation (hidden on mobile) --}}
+
+            {{-- Language Switcher (hidden on mobile) --}}
+            <div class="hidden md:flex items-center gap-x-6">
+                <a href="{{ route('lang.switch', 'en') }}"
+                   class="{{ app()->getLocale() === 'en' ? 'font-bold underline' : '' }}">
+                    English
+                </a>
+                <a href="{{ route('lang.switch', 'ar') }}"
+                   class="{{ app()->getLocale() === 'ar' ? 'font-bold underline' : '' }}">
+                    العربية
+                </a>
+            </div>
         </div>
 
         {{-- Search Bar (hidden on mobile) --}}
@@ -49,11 +47,11 @@
                 <div class="relative group">
                     <input name="search"
                            class="w-[250px] bg-[#f4f4f4] placeholder:text-[#757575] text-sm border border-[#f4f4f4] rounded-full px-3 py-2 transition duration-300 focus:border-[#f7e4d6] focus:bg-[#f7e4d6] focus:ring-0"
-                           placeholder="{{ __('Search courses...') }}" />
+                           placeholder="{{ __('Search courses...') }}"/>
                     <button class="absolute top-2 rtl:left-3 ltr:right-3" type="submit">
                         {{-- Changed to type="submit" for actual search --}}
                         <x-tabler-search
-                            class="text-lg text-[#757575] group-focus-within:text-primary-orange transition duration-300" />
+                            class="text-lg text-[#757575] group-focus-within:text-primary-orange transition duration-300"/>
                     </button>
                 </div>
             </form>
@@ -108,7 +106,7 @@
                                          viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
                                               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                              clip-rule="evenodd" />
+                                              clip-rule="evenodd"/>
                                     </svg>
                                 </div>
                             </button>
@@ -172,17 +170,16 @@
                 <div class="relative group w-full">
                     <input name="search"
                            class="w-full bg-[#f4f4f4] placeholder:text-[#757575] text-sm border border-[#f4f4f4] rounded-full px-4 py-3 transition duration-300 focus:border-[#f7e4d6] focus:bg-[#f7e4d6] focus:ring-0"
-                           placeholder="{{ __('Search courses...') }}" />
+                           placeholder="{{ __('Search courses...') }}"/>
                     <button class="absolute top-1/2 -translate-y-1/2 rtl:left-4 ltr:right-4" type="submit">
                         <x-tabler-search
-                            class="text-xl text-[#757575] group-focus-within:text-primary-orange transition duration-300" />
+                            class="text-xl text-[#757575] group-focus-within:text-primary-orange transition duration-300"/>
                     </button>
                 </div>
             </form>
 
             {{-- Mobile Categories --}}
-            <a href=""
-               class="text-[#333] text-lg font-bold hover:text-primary-orange block">{{ __('Categories') }}</a>
+
 
             {{-- Mobile Language Switcher --}}
             <div class="flex items-center gap-x-6 text-lg">
@@ -279,14 +276,19 @@
             <ul class="w-full md:w-auto">
                 <li class="text-xl text-[#333] font-bold mb-3">{{ __('About Afaq') }}</li>
                 <li class="mb-3 text-[#333]"><a href="#" class="hover:text-primary-orange">{{ __('About Us') }}</a></li>
-                <li class="mb-3 text-[#333]"><a href="#" class="hover:text-primary-orange">{{ __('Contact Us') }}</a></li>
-                <li class="mb-3 text-[#333]"><a href="#" class="hover:text-primary-orange">{{ __('Terms & Conditions') }}</a></li>
+                <li class="mb-3 text-[#333]"><a href="#" class="hover:text-primary-orange">{{ __('Contact Us') }}</a>
+                </li>
+                <li class="mb-3 text-[#333]"><a href="#"
+                                                class="hover:text-primary-orange">{{ __('Terms & Conditions') }}</a>
+                </li>
             </ul>
             <ul class="w-full md:w-auto">
                 <li class="text-xl text-[#333] font-bold mb-3">{{ __('Quick Links') }}</li>
                 <li class="mb-3 text-[#333]"><a href="/" class="hover:text-primary-orange">{{ __('Home') }}</a></li>
-                <li class="mb-3 text-[#333]"><a href="#" class="hover:text-primary-orange">{{ __('Become a Trainer') }}</a></li>
-                <li class="mb-3 text-[#333]"><a href="#" class="hover:text-primary-orange">{{ __('Categories') }}</a></li>
+                <li class="mb-3 text-[#333]"><a href="#"
+                                                class="hover:text-primary-orange">{{ __('Become a Trainer') }}</a></li>
+                <li class="mb-3 text-[#333]"><a href="#" class="hover:text-primary-orange">{{ __('Categories') }}</a>
+                </li>
             </ul>
             <ul class="w-full md:w-auto">
                 <li class="text-xl text-[#333] font-bold mb-3">{{ __('Connect With Us') }}</li>
