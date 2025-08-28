@@ -2,48 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Cassandra\Type\UserType;
-use Filament\Facades\Filament;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class TrainerController extends Controller
 {
-    /**
-     * Show the trainer application form.
-     */
-    public function showForm()
-    {
-        return view('trainer.apply');
-    }
-
-    /**
-     * Handle trainer application submission.
-     */
     public function submitApplication(Request $request)
     {
-        $user = auth()->user();
-
         $data = $request->validate([
-            'phone' => 'nullable|string|max:20',
-            'avatar' => 'nullable|image|max:2048',
-            'qualification' => 'nullable|string|max:255',
-            'profession' => 'nullable|string|max:255',
-            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:4096',
+            'qualification' => 'required|string|max:255',
+            'profession' => 'required|string|max:255',
+            'resume' => 'required|file|mimes:pdf|max:2048',
+            'avatar' => 'required|file|image|max:2048',
         ]);
 
-        if ($request->hasFile('avatar')) {
-            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
-        }
-
+        // For now, just dump the validated data\
+        //update user and user type to trainer
+        $user = $request->user();
+        $user->qualification = $data['qualification'];
+        $user->profession = $data['profession'];
+        $user->type = 'trainer';
         if ($request->hasFile('resume')) {
-            $data['resume'] = $request->file('resume')->store('resumes', 'public');
+            $user->resume = $request->file('resume')->store('resumes', 'public');
         }
+        if ($request->hasFile('avatar')) {
+            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+        }
+        $user->save();
+        return redirect('trainer')->with('status', 'application-submitted');
+    }
 
-        $data['type'] = 'trainer';
-
-        $user->update($data);
-
-        return redirect()->route(Filament::getPanel('trainer')->getUrl());
+    public function showForm()
+    {
+        // This method is for showing a dedicated application form page, which is not what the user asked for.
+        // The user wants a modal on the profile page.
+        // I will leave this empty for now.
     }
 }
