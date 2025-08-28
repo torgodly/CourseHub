@@ -10,13 +10,13 @@ class LoginController extends Controller
     //
     public function login(Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required|string|min:8',
         ]);
 
         if (auth()->attempt($request->only('email', 'password'))) {
-            return redirect()->intended('profile.show')->with('success', 'Login successful!');
+            return redirect()->route('profile.show')->with('success', 'Login successful!');
         }
 
         return back()->withErrors([

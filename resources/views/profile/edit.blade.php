@@ -6,12 +6,12 @@
         {{-- User Avatar + Name --}}
         <div class="flex flex-col items-center mb-10">
             <div class="relative">
-                <img src="{{asset('storage/'.auth()->user()->avatar) ?? 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
+                <img src="{{auth()->user()->avatar ? asset('storage/'.auth()->user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
                      alt="Avatar"
                      class="w-28 h-28 rounded-full object-cover border-4 border-primary-color shadow">
                 <label for="avatar-upload"
                        class="absolute bottom-0 right-0 bg-primary-color text-white p-2 rounded-full cursor-pointer hover:opacity-90">
-                    <i class="fa fa-camera"></i>
+                    <x-tabler-camera-filled class="w-5 h-5 fill-primary-orange"/>
                 </label>
             </div>
             <h1 class="mt-4 text-2xl font-bold">{{ auth()->user()->name }}</h1>
@@ -27,7 +27,7 @@
                 {{-- Avatar Upload --}}
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <img src="{{ asset('storage/'.auth()->user()->avatar) ?? 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
+                        <img src="{{ auth()->user()->avatar ? asset('storage/'.auth()->user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
                              alt="Avatar"
                              class="w-20 h-20 rounded-full object-cover border border-gray-300 shadow">
                     </div>

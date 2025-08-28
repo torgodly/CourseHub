@@ -89,10 +89,17 @@
                         <span class="text-lg leading-none">+</span>{{ __('Add Money') }}
                     </a>
                 </div>
-                <a href="/trainer"
-                   class="flex items-center justify-center gap-1 px-4 py-2 font-bold bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-orange-500 focus:outline-none focus:ring-2 focus:ring-primary-orange">
-                    <span class="text-lg leading-none"></span>{{ __('My Dashboard') }}
-                </a>
+                @if(auth()->user()->type =='admin')
+                    <a href="/admin"
+                       class="flex items-center justify-center gap-1 px-4 py-2 font-bold bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-orange-500 focus:outline-none focus:ring-2 focus:ring-primary-orange">
+                        <span class="text-lg leading-none"></span>{{ __('My Dashboard') }}
+                    </a>
+                @elseif(auth()->user()->type =='trainer')
+                    <a href="/trainer"
+                       class="flex items-center justify-center gap-1 px-4 py-2 font-bold bg-primary-orange text-white text-xs rounded-full transition-all duration-300 hover:bg-white hover:text-primary-orange hover:ring-2 hover:ring-orange-500 focus:outline-none focus:ring-2 focus:ring-primary-orange">
+                        <span class="text-lg leading-none"></span>{{ __('My Dashboard') }}
+                    </a>
+                @endif
 
                 {{-- User Dropdown --}}
                 <div class="sm:flex sm:items-center">
