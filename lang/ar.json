@@ -166,11 +166,16 @@
     "Already have an account?": "هل لديك حساب بالفعل؟",
     "Are you an expert in your field? Join our team of trainers and share your knowledge with the world.": "هل أنت خبير في مجالك؟ انضم إلى فريق المدربين لدينا وشارك معرفتك مع العالم.",
     "Apply Now": "قدم الآن",
+    "Forgot Password?": "هل نسيت كلمة المرور؟",
+    "We have emailed your password reset link.": "لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
     "Trainer Application": "طلب تقديم كمدرب",
     "Qualification": "المؤهل العلمي",
     "Profession": "المهنة",
     "Resume (PDF)": "السيرة الذاتية (PDF)",
     "Avatar (Image)": "الصورة الرمزية (صورة)",
     "Cancel": "إلغاء",
-    "Submit Application": "إرسال الطلب"
+    "Submit Application": "إرسال الطلب",
+    "Reset Your Password": "إعادة تعيين كلمة المرور الخاصة بك",
+    "Send Password Reset Link": "إرسال رابط إعادة تعيين كلمة المرور",
+    "Confirm New Password": "تأكيد كلمة المرور الجديدة"
 }

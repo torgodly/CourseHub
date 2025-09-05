@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Login') }}</title>
+    <title>{{ __('Reset Your Password') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -16,10 +16,16 @@
             <a href="/" class="relative -top-2">
                 <img src="{{ asset('images/Red AFAQ Logo Ver.png') }}" alt="AFAQ logo" class="w-28 h-auto md:w-36">
             </a>
-            <p class="text-lg text-gray-600 font-medium">{{__('Login to your account')}}</p>
+            <p class="text-lg text-gray-600 font-medium">{{__('Reset Your Password')}}</p>
         </div>
+        @if (session('status'))
+            <div class="mb-4 text-green-600 font-medium text-center">
+                {{ __(session('status')) }}
+            </div>
+        @endif
 
-        <form method="POST" action="{{ route('login.store') }}">
+
+        <form method="POST" action="{{ route('password.email') }}">
             @csrf
 
             <div class="mb-4">
@@ -32,34 +38,14 @@
                 @enderror
             </div>
 
-            <div class="mb-6">
-                <label for="password" class="block text-gray-700 font-bold mb-2">{{ __('Password') }}</label>
-                <input type="password" name="password" id="password"
-                       class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all @error('password') border-red-500 @enderror"
-                       required>
-                @error('password')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-                <div class="mt-2 text-right">
-                    <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-200">
-                        {{ __('Forgot Password?') }}
-                    </a>
-                </div>
-            </div>
-
             <div class="text-center">
                 <button type="submit"
                         class="w-full bg-primary-orange text-white rounded-xl font-bold py-3 px-4 hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/40">
-                    {{ __('Login') }}
+                    {{ __('Send Password Reset Link') }}
                 </button>
             </div>
         </form>
 
-        <div class="text-center mt-6">
-            <p class="text-gray-600">{{ __("Don't have an account?") }} <a href="{{ route('register') }}"
-                                                                           class="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300">{{ __('Register') }}</a>
-            </p>
-        </div>
     </div>
 </div>
 </body>
