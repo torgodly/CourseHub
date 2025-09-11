@@ -97,6 +97,50 @@
             </form>
         </div>
 
+        @if(auth()->user()->type == 'trainer')
+            <div class="bg-gray-50 p-6 rounded-2xl shadow-sm mt-8">
+                <h2 class="text-lg font-semibold mb-5">{{ __('Trainer Information') }}</h2>
+                <form method="POST" action="{{ route('profile.trainer.update') }}" enctype="multipart/form-data"
+                      class="space-y-5">
+                    @csrf
+
+                    {{-- Qualification --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">{{ __('Qualification') }}</label>
+                        <input type="text" name="qualification"
+                               value="{{ old('qualification', auth()->user()?->qualification) }}"
+                               class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-primary-color focus:border-primary-color">
+                    </div>
+
+                    {{-- Profession --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">{{ __('Profession') }}</label>
+                        <input type="text" name="profession"
+                               value="{{ old('profession', auth()->user()?->profession) }}"
+                               class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-primary-color focus:border-primary-color">
+                    </div>
+
+                    {{-- Resume --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">{{ __('Resume (PDF)') }}</label>
+                        <input type="file" name="resume"
+                               class="w-full text-sm text-gray-500 file:me-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-orange file:text-white hover:file:bg-opacity-90"> {{-- Changed file:mr-4 to file:me-4 --}}
+                        @if(auth()->user() && auth()->user()->resume)
+                            <p class="text-xs text-gray-500 mt-1">{{ __('') }} <a
+                                    href="{{ asset('storage/' . auth()->user()->resume) }}" target="_blank"
+                                    class="text-primary-orange underline">{{ __('View Resume') }}</a></p>
+                        @endif
+                    </div>
+
+                    <button type="submit"
+                            class="w-full py-2 bg-primary-orange text-white rounded-xl font-medium hover:opacity-90">
+                        {{ __('Update Trainer Info') }}
+                    </button>
+                </form>
+            </div>
+        @endif
+
+
         @if(auth()->user()->type == 'user')
             {{-- Become a Trainer (Alpine.js Scope) --}}
             <div x-data="{ showTrainerModal: false }"> {{-- Alpine.js component scope --}}

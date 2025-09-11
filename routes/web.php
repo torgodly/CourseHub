@@ -61,6 +61,8 @@ Route::prefix('profile')->middleware('auth')->name('profile.')->group(function (
     Route::get('/', [UserController::class, 'show'])->name('show');
     Route::post('update', [UserController::class, 'update'])->name('update');
     Route::post('password', [UserController::class, 'updatePassword'])->name('password.update');
+    ////trainer.update update trainer profile info ..qualification etc
+    Route::post('trainer/update', [UserController::class, 'updateTrainerProfile'])->name('trainer.update');
 });
 
 // Trainer Application

@@ -177,5 +177,9 @@
     "Submit Application": "إرسال الطلب",
     "Reset Your Password": "إعادة تعيين كلمة المرور الخاصة بك",
     "Send Password Reset Link": "إرسال رابط إعادة تعيين كلمة المرور",
-    "Confirm New Password": "تأكيد كلمة المرور الجديدة"
+    "Confirm New Password": "تأكيد كلمة المرور الجديدة",
+    "Trainer Information": "معلومات المدرب",
+    "Update Trainer Info": "تحديث معلومات المدرب",
+    "Current Resume:": "السيرة الذاتية الحالية:",
+    "View Resume": "عرض السيرة الذاتية"
 }

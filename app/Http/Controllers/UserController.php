@@ -48,4 +48,23 @@ class UserController extends Controller
 
         return redirect()->route('profile.show')->with('success', __('Password updated successfully.'));
     }
+
+    public function updateTrainerProfile(Request $request)
+    {
+        $request->validate([
+            'qualification' => 'nullable|string|max:255',
+            'profession' => 'nullable|string|max:255',
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        $trainer = $request->user();
+        if ($request->hasFile('resume')) {
+            $resumePath = $request->file('resume')->store('resumes', 'public');
+            $trainer->resume = $resumePath;
+        }
+        $trainer->qualification = $request->input('qualification');
+        $trainer->profession = $request->input('profession');
+        $trainer->save();
+        return redirect()->route('profile.show')->with('success', __('Trainer profile updated successfully.'));
+    }
 }
