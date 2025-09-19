@@ -40,6 +40,9 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->brandLogo(asset('logo/red-logo.png'))
+            ->darkModeBrandLogo(asset('logo/white-logo.png'))
+            ->brandLogoHeight('3rem')
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled()

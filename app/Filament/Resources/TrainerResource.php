@@ -9,6 +9,13 @@ use App\Models\User;
 use App\Traits\ResourceTranslatedLabels;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -60,8 +67,9 @@ class TrainerResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-//                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->requiresConfirmation()
+                ->modalWidth('3xl'),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
@@ -76,5 +84,52 @@ class TrainerResource extends Resource
         return [
             'index' => Pages\ManageTrainers::route('/'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make(__('Profile'))
+                    ->schema([
+                        ImageEntry::make('avatar_url')
+                            ->label('Avatar')
+                            ->circular()
+                            ->size(80)
+                            ->placeholder('No avatar'),
+                        TextEntry::make('name')->label('Name')->weight('bold'),
+                        TextEntry::make('email')->label('Email')->copyable(),
+                        TextEntry::make('phone')->label('Phone')->placeholder('—'),
+                    ])
+                    ->columns(2),
+
+                Section::make(__("Details"))
+                    ->schema([
+                        TextEntry::make('qualification')->label('Qualification')->placeholder('—'),
+                        TextEntry::make('profession')->label('Profession')->placeholder('—'),
+                        TextEntry::make('type')->label('Role')->badge()
+                            ->color(fn($state) => match ($state) {
+                                'admin' => 'danger',
+                                'trainer' => 'info',
+                                default => 'gray',
+                            }),
+                        IconEntry::make('active')
+                            ->boolean()
+                            ->label('Active'),
+                    ])
+                    ->columns(2),
+
+                Section::make(__("Wallet"))
+                    ->schema([
+//                        Grid::make([
+                        TextEntry::make('wallet.balance')
+                            ->label('Balance'),
+                        TextEntry::make('wallet.updated_at')
+                            ->label('Last Updated')
+                            ->since(),
+//                        ])
+                    ])
+            ])
+            ->columns(2);
     }
 }

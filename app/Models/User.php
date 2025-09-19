@@ -34,6 +34,7 @@ class User extends Authenticatable implements Wallet, Customer, FilamentUser
             default => false,
         };
     }
+    protected $appends = ['avatar_url'];
 
     //is_admin
     public function getIsAdminAttribute(): bool
@@ -104,6 +105,7 @@ class User extends Authenticatable implements Wallet, Customer, FilamentUser
     {
         return $this->belongsToMany(Course::class, 'course_user_favorites');
     }
+
     public function favoritedBy()
     {
         return $this->belongsToMany(User::class, 'course_user_favorites');
@@ -115,5 +117,8 @@ class User extends Authenticatable implements Wallet, Customer, FilamentUser
     }
 
 
-
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? asset('storage/' . $this->avatar) : null;
+    }
 }

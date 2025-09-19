@@ -188,5 +188,8 @@
     "description": "الوصف",
     "Redeem Voucher Card": "بطاقة استرداد القسيمة",
     "Enter your voucher code below to add funds to your wallet.": "أدخل رمز القسيمة أدناه لإضافة أموال إلى محفظتك.",
-    "Redeem Code": "استرداد الرمز"
-}
+    "Redeem Code": "استرداد الرمز",
+    "Details": "التفاصيل",
+    "Courses (as Trainer)": "الدورات (كمدرب)",
+    "Phone": "الهاتف"
+ }
