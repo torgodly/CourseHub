@@ -181,5 +181,12 @@
     "Trainer Information": "معلومات المدرب",
     "Update Trainer Info": "تحديث معلومات المدرب",
     "Current Resume:": "السيرة الذاتية الحالية:",
-    "View Resume": "عرض السيرة الذاتية"
+    "View Resume": "عرض السيرة الذاتية",
+    "Start by redeeming a voucher or purchasing courses to see transactions here.": "ابدأ باسترداد قسيمة أو شراء دورات لرؤية المعاملات هنا.",
+    "code": "رمز",
+    "amount": "المبلغ",
+    "description": "الوصف",
+    "Redeem Voucher Card": "بطاقة استرداد القسيمة",
+    "Enter your voucher code below to add funds to your wallet.": "أدخل رمز القسيمة أدناه لإضافة أموال إلى محفظتك.",
+    "Redeem Code": "استرداد الرمز"
 }
