@@ -109,7 +109,6 @@ class CourseController extends Controller
             'locked' => false
         ];
         $episodes = collect([$trailer])->merge($episodes)->sortBy('number')->values()->all();
-
         //get avg rating
         $averageRating = $course->ratings()->avg('course_user_ratings.rating');
         $averageRating = round($averageRating, 1);

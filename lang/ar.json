@@ -204,5 +204,11 @@
     "You must purchase the course before rating.": "يجب عليك شراء الدورة قبل التقييم.",
     "You must be logged in to rate a course.": "يجب تسجيل الدخول لتقييم دورة.",
     "You have purchased this course successfully!": "لقد قمت بشراء هذه الدورة بنجاح!",
-    "Course rated successfully.": "تم تقييم الدورة بنجاح."
+    "Course rated successfully.": "تم تقييم الدورة بنجاح.",
+    "Student Feedback":" ملاحظات الطلاب",
+    "Ratings and reviews from students": "التقييمات والمراجعات من الطلاب",
+    "Overall Rating":" التقييم العام",
+    "reviews": "مراجعات",
+    "{1} :count review|[2,*] :count reviews": "{1} :count مراجعة|[2,*] :count مراجعات",
+    "Write a Review": "اكتب مراجعة"
  }

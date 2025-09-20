@@ -6,7 +6,7 @@
             <div class="bg-white shadow-md border border-gray-200 rounded-lg overflow-hidden mb-6 sm:mb-8">
                 <div class="px-4 py-4 sm:px-6 sm:py-5">
                     <div class="flex items-center justify-between flex-wrap gap-3">
-                        <div class="flex items-center space-x-3 ">
+                        <div class="flex items-center space-x-3 rtl:space-x-reverse">
                             <div
                                 class="w-10 h-10 bg-primary-orange rounded-lg flex items-center justify-center flex-shrink-0">
                                 <x-tabler-school class="w-6 h-6 text-white absolute"/>
@@ -25,7 +25,7 @@
                             >
                                 <div class="flex text-yellow-400 text-sm" x-html="renderStars(courseRating)"></div>
                                 <span class="ml-2 rtl:ml-0 rtl:mr-2 text-sm text-gray-700 font-medium"
-                                      x-text="`${courseRating} (${totalReviews})`"></span>
+                                      x-text="`${courseRating.toFixed(1)} (${totalReviews})`"></span>
                             </div>
                             {{-- Progress indicator --}}
                             <div
@@ -284,6 +284,154 @@
                     </div>
                 </div>
             </div>
+
+            <!-- START: Fixed Ratings Section -->
+            <div class="mt-8 lg:mt-12">
+                <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 sm:p-6 lg:p-8">
+                    <div class="flex items-center mb-6">
+                        <div
+                            class="w-10 h-10 bg-accent-blue rounded-lg flex items-center justify-center mr-3 rtl:mr-0 rtl:ml-3 flex-shrink-0">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 leading-tight">{{__('Student Feedback')}}</h3>
+                            <p class="text-sm text-gray-600">{{__('Ratings and reviews from students')}}</p>
+                        </div>
+                    </div>
+
+                    @if($totalReviews > 0)
+                        @php
+                            // Calculate distribution for the rating bars
+                            $distribution = collect([5, 4, 3, 2, 1])->mapWithKeys(function ($star) use ($course, $totalReviews) {
+                                $count = $course->ratings->where('pivot.rating', $star)->count();
+                                return [
+                                    $star => [
+                                        'count' => $count,
+                                        'percentage' => $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0,
+                                    ]
+                                ];
+                            });
+                        @endphp
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <!-- Left Side: Overall Rating Summary -->
+                            <div
+                                class="md:col-span-1 border-b md:border-b-0 md:border-e border-gray-200 pb-6 md:pb-0 md:pe-8 rtl:md:border-e-0 rtl:md:border-s rtl:md:pe-0 rtl:md:ps-8">
+                                <div class="text-center flex flex-col items-center">
+                                    <p class="text-sm text-gray-600">{{ __('Overall Rating') }}</p>
+                                    <div
+                                        class="text-5xl font-bold text-gray-900 my-2">{{ number_format($averageRating, 1) }}</div>
+                                    <div class="flex justify-center mb-2">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <svg
+                                                class="w-5 h-5 {{ $i <= round($averageRating) ? 'text-yellow-400' : 'text-gray-300' }}"
+                                                fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z"/>
+                                            </svg>
+                                        @endfor
+                                    </div>
+                                    <p class="text-sm text-gray-500">
+                                        {{ trans_choice(__('{1} :count review|[2,*] :count reviews'), $totalReviews, ['count' => $totalReviews]) }}
+                                    </p>
+                                </div>
+
+                                <!-- Rating Distribution Bars -->
+                                <div class="mt-6 space-y-2">
+                                    @foreach($distribution as $star => $data)
+                                        <div class="flex items-center gap-x-3">
+                                            <span class="text-xs font-medium text-gray-600 w-12 text-end">{{ $star }}&nbsp;★</span>
+                                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                                <div class="bg-yellow-400 h-2 rounded-full"
+                                                     style="width: {{ $data['percentage'] }}%"></div>
+                                            </div>
+                                            <span class="text-xs font-medium text-gray-500 w-8 text-start">{{ round($data['percentage']) }}%</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @if(auth()->check() && auth()->user()->paid($course))
+                                    <button @click="showRatingModal = true"
+                                            class="mt-6 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-orange hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-orange">
+                                        <svg class="w-5 h-5 mr-2 rtl:mr-0 rtl:ml-2 -ml-1" fill="currentColor"
+                                             viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z"/>
+                                        </svg>
+                                        {{ __('Write a Review') }}
+                                    </button>
+                                @endif
+                            </div>
+
+                            <!-- Right Side: Reviews List -->
+                            <div class="md:col-span-2 space-y-6 max-h-96 overflow-y-auto custom-scrollbar pr-2">
+                                @foreach($course->ratings as $review)
+                                    <div class="flex gap-3 space-x-4 rtl:space-x-reverse">
+                                        <img
+                                            class="h-10 w-10 rounded-full object-cover flex-shrink-0"
+                                            src="{{ $review->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($review->name) . '&background=random&color=fff' }}"
+                                            alt="{{ $review->name }}">
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <h4 class="text-sm font-semibold text-gray-900">{{ $review->name }}</h4>
+                                                    <p class="text-xs text-gray-500">{{ $review->pivot->created_at->diffForHumans() }}</p>
+                                                </div>
+                                                <div class="flex items-center flex-shrink-0">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <svg
+                                                            class="w-4 h-4 {{ $i <= $review->pivot->rating ? 'text-yellow-400' : 'text-gray-300' }}"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path
+                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z"/>
+                                                        </svg>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            @if($review->pivot->comment)
+                                                <p class="mt-3 text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
+                                                    {{ $review->pivot->comment }}
+                                                </p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @if(!$loop->last)
+                                        <hr class="border-gray-100">
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <div class="text-center py-12">
+                            <div
+                                class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="text-lg font-semibold text-gray-800">{{ __('No Reviews Yet') }}</h4>
+                            <p class="text-gray-500 mt-1">{{ __('Be the first to share your thoughts on this course!') }}</p>
+                            @if(auth()->check() && auth()->user()->paid($course))
+                                <button @click="showRatingModal = true"
+                                        class="mt-4 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-orange hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-orange">
+                                    <svg class="w-5 h-5 mr-2 rtl:mr-0 rtl:ml-2 -ml-1" fill="currentColor"
+                                         viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z"/>
+                                    </svg>
+                                    {{ __('Write a Review') }}
+                                </button>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            </div>
+            <!-- END: Fixed Ratings Section -->
+
         </div>
 
         <!-- Custom Scrollbar Styling (add this to your main CSS file for production) -->
@@ -323,8 +471,8 @@
 
 
                     courseId: courseId,
-                    courseRating: {{$averageRating}},
-                    totalReviews: {{$totalReviews}},
+                    courseRating: {{ (float) $averageRating }},
+                    totalReviews: {{ $totalReviews }},
                     completedEpisodes: 0,
                     totalEpisodes: 0,
                     totalDuration: "0h 0m",
@@ -469,29 +617,18 @@
                     },
 
                     renderStars(rating) {
-                        const fullStars = Math.floor(rating);
-                        const hasHalfStar = rating % 1 !== 0;
                         let stars = '';
-                        // Font Awesome icons assuming you have them linked (e.g., via CDN in layouts.app)
-                        for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
-                        if (hasHalfStar) stars += '<i class="fas fa-star-half-alt"></i>';
-                        const emptyStars = 5 - Math.ceil(rating);
-                        for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
-                        return stars;
-                    },
+                        const fullStars = Math.floor(rating);
+                        const halfStar = rating % 1 >= 0.5;
 
-                    // File icons are hardcoded in the blade, but if you wanted dynamic icons based on extension
-                    // you would use something like this in the template: :class="getFileIcon(file)" and :class="getFileIconBg(file)"
-                    getFileIcon(file) {
-                        const extension = file.extension.toLowerCase();
-                        if (extension.includes('pdf')) return 'x-tabler-file-type-pdf';
-                        if (['zip', 'rar', '7z'].includes(extension)) return 'x-tabler-file-zip';
-                        if (['doc', 'docx'].includes(extension)) return 'x-tabler-file-type-doc';
-                        if (['xls', 'xlsx'].includes(extension)) return 'x-tabler-file-type-xls';
-                        if (['ppt', 'pptx'].includes(extension)) return 'x-tabler-file-type-ppt';
-                        if (['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(extension)) return 'x-tabler-file-type-image';
-                        // Add more as needed
-                        return 'x-tabler-file'; // Default icon
+                        for (let i = 0; i < 5; i++) {
+                            if (i < fullStars) {
+                                stars += '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z"/></svg>';
+                            } else {
+                                stars += '<svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z"/></svg>';
+                            }
+                        }
+                        return stars;
                     },
 
                     downloadFile(file) {
@@ -514,6 +651,7 @@
             x-show="showRatingModal"
             x-transition.opacity
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            style="display: none;"
         >
             <div
                 @click.away="showRatingModal = false"
@@ -522,9 +660,12 @@
                 <!-- Close button -->
                 <button
                     @click="showRatingModal = false"
-                    class="absolute top-3 rtl:right-3 ltr:right-3 ltr:left-auto rtl:left-auto text-gray-400 hover:text-gray-600"
+                    class="absolute top-3 right-3 rtl:left-3 rtl:right-auto text-gray-400 hover:text-gray-600"
                 >
-                    ✕
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
                 </button>
 
                 <!-- Title -->
@@ -535,7 +676,7 @@
                 <!-- Form -->
                 <form method="POST" action="{{ route('courses.rate', $course) }}">
                     @csrf
-                    <input type="hidden" name="rating" x-model="userRating">
+                    <input type="hidden" name="rating" x-model.number="userRating">
 
                     <!-- Star rating -->
                     <div class="flex justify-center space-x-2 rtl:space-x-reverse mb-5" x-data="{ hoverRating: 0 }">
@@ -552,13 +693,8 @@
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                             >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1
-                        1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385
-                        2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755
-                        1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175
-                        0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1
-                        1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1
-                        1 0 00.95-.69l1.286-3.974z"/>
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z"/>
                             </svg>
                         </template>
                     </div>
@@ -583,7 +719,8 @@
                         </button>
                         <button
                             type="submit"
-                            class="px-4 py-2 rounded-lg bg-primary-orange text-white hover:bg-orange-700 transition"
+                            :disabled="userRating === 0"
+                            class="px-4 py-2 rounded-lg bg-primary-orange text-white hover:bg-orange-700 transition disabled:bg-orange-300 disabled:cursor-not-allowed"
                         >
                             {{ __('Submit') }}
                         </button>

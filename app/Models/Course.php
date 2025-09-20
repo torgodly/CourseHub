@@ -79,7 +79,8 @@ class Course extends Model implements HasMedia, ProductLimitedInterface
 
     public function ratings()
     {
-        return $this->belongsToMany(User::class, 'course_user_ratings')->withPivot('rating', 'comment')
+        return $this->belongsToMany(User::class, 'course_user_ratings')
+            ->withPivot('rating', 'comment')
             ->withTimestamps();
     }
 
