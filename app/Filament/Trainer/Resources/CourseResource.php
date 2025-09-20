@@ -80,7 +80,7 @@ class CourseResource extends Resource
                             ])
                     ])->columnSpan(2),
                     Forms\Components\Group::make()->schema([
-                        Forms\Components\Section::make('Pricing & Settings')
+                        Forms\Components\Section::make(__("Pricing & Settings"))
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
@@ -97,14 +97,16 @@ class CourseResource extends Resource
                                             ->required()
                                         ,
                                         Forms\Components\Toggle::make('is_free')
+                                            ->translateLabel()
                                             ->live()
                                             ->required(),
                                     ]),
 
                             ]),
-                        Forms\Components\Section::make('Media')
+                        Forms\Components\Section::make(__("Media"))
                             ->schema([
                                 Forms\Components\Select::make('tags')
+                                    ->translateLabel()
                                     ->multiple()
                                     ->preload()
                                     ->relationship('tags', 'name'),

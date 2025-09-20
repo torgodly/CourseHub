@@ -18,26 +18,21 @@ class CourseController extends Controller
     {
         $tab = $request->get('tab', 'all'); // default: all
         $search = $request->get('search');
-
         $query = Course::query()->with('trainer')->orderBy('created_at', 'desc');
         if ($search) {
             $query->where('title', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%');
         }
-
         switch ($tab) {
             case 'new':
                 $query = $query->orderBy('created_at', 'desc');
                 break;
-
             case 'popular':
-                $query = $query->orderBy('created_at', 'asc'); // or 'students_count' if you track that
+                $query = $query->withCount('enrollments')->orderBy('enrollments_count', 'desc');
                 break;
-
             case 'specialties':
                 $query = $query->whereNotNull('level'); // example condition
                 break;
-
             case 'all':
             default:
                 // no extra filtering

@@ -12,10 +12,6 @@
                 'all' => __('All'),
                 'new' => __('New'),
                 'popular' => __('Popular'),
-                'specialties' => __('Specialties'),
-                // Add more tabs here to see the effect of overflow-x-auto
-                // 'trending' => __('Trending'),
-                // 'latest' => __('Latest'),
             ];
         @endphp
 
@@ -32,9 +28,19 @@
     </div>
 
     {{-- Sort & Filter --}}
-    <div class="flex gap-3 flex-shrink-0 justify-end md:justify-normal"> {{-- Added flex-shrink-0 and justify-end for better mobile alignment --}}
+    <div
+        class="flex gap-3 flex-shrink-0 justify-end md:justify-normal"> {{-- Added flex-shrink-0 and justify-end for better mobile alignment --}}
         {{-- Sort Dropdown --}}
-        <select class="block w-full sm:w-auto border rounded-xl px-3 py-2 text-sm font-medium text-gray-700 border-gray-300 focus:ring-2 focus:ring-primary-orange focus:border-primary-orange">
+        <select
+            class="block w-full sm:w-auto border rounded-xl px-3 py-2 text-sm font-medium text-gray-700 border-gray-300 focus:ring-2 focus:ring-primary-orange focus:border-primary-orange">
+            {{-- Added block w-full sm:w-auto to make it full width on small screens and then auto on larger --}}
+            <option>{{ __('Sort by') }}</option>
+            <option>{{ __('Newest') }}</option>
+            <option>{{ __('Oldest') }}</option>
+            <option>{{ __('Most Popular') }}</option>
+        </select>
+        <select
+            class="block w-full sm:w-auto border rounded-xl px-3 py-2 text-sm font-medium text-gray-700 border-gray-300 focus:ring-2 focus:ring-primary-orange focus:border-primary-orange">
             {{-- Added block w-full sm:w-auto to make it full width on small screens and then auto on larger --}}
             <option>{{ __('Sort by') }}</option>
             <option>{{ __('Newest') }}</option>

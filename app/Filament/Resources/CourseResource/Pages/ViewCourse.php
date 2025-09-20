@@ -39,7 +39,7 @@ class ViewCourse extends ViewRecord
 
             ])->columnSpan(2),
             Group::make()->schema([
-                Section::make('Enrollments')->schema([
+                Section::make(__('Enrollments'))->schema([
                     Grid::make(3)->schema([
                         TextEntry::make('enrollments_count')
                             ->translateLabel()

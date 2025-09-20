@@ -50,6 +50,7 @@ class CourseResource extends Resource
                     ->boolean(),
                 Tables\Columns\TextColumn::make('enrollments_count')
                     ->label('Enrollments')
+                    ->translateLabel()
                     ->sortable()
                     ->counts('enrollments'),
                 Tables\Columns\TextColumn::make('status')

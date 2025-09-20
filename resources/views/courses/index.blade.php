@@ -10,17 +10,14 @@
                 {{ __('Explore our wide range of courses designed to help you learn and grow in your field. Whether you are looking to enhance your skills or start a new career, we have something for everyone.') }}
             </p>
         </div>
-
         {{-- Tabs --}}
-        <x-course-tabs :active="$active" />
-
+        <x-course-tabs :active="$active"/>
         {{-- Filters --}}
         {{-- <x-course-filters /> --}}
-
         {{-- Courses Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @foreach ($courses as $course)
-                <x-course-card :$course />
+                <x-course-card :$course/>
             @endforeach
 
         </div>
