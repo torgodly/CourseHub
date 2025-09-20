@@ -79,7 +79,8 @@ class Course extends Model implements HasMedia, ProductLimitedInterface
 
     public function ratings()
     {
-        return $this->belongsToMany(User::class, 'course_user_ratings')->withPivot('rating')->withTimestamps();
+        return $this->belongsToMany(User::class, 'course_user_ratings')->withPivot('rating', 'comment')
+            ->withTimestamps();
     }
 
     public function getAverageRatingAttribute()
@@ -88,21 +89,20 @@ class Course extends Model implements HasMedia, ProductLimitedInterface
     }
 
 
-
-public function favoritedBy()
-{
-    return $this->belongsToMany(User::class, 'course_user_favorites');
-}
-
-public function isFavoritedBy(?User $user): bool
-{
-    if (!$user) {
-        return false; // Not logged in
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'course_user_favorites');
     }
 
-    return $this->favoritedBy()
-        ->where('user_id', $user->id)
-        ->exists();
-}
+    public function isFavoritedBy(?User $user): bool
+    {
+        if (!$user) {
+            return false; // Not logged in
+        }
+
+        return $this->favoritedBy()
+            ->where('user_id', $user->id)
+            ->exists();
+    }
 
 }

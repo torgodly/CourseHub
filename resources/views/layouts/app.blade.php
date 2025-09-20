@@ -18,7 +18,7 @@
 
 <body style="font-family: 'IBM Plex Sans Arabic', sans-serif;">
 
-<header class="shadow-lg fixed top-0 right-0 left-0 z-50 bg-white" x-data="{ open: false }">
+<header class="shadow-lg fixed top-0 right-0 left-0 z-10 bg-white" x-data="{ open: false }">
     <div class="container mx-auto h-20 px-4 pt-3 flex items-center justify-between">
         {{-- Logo --}}
         <div class="flex gap-3 justify-center items-center">

@@ -1,17 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- Main container for the course page --}}
-    {{-- py-8 sm:py-12 provides consistent top/bottom padding for the whole page content --}}
     <div class="py-8 sm:py-12" x-data="courseData({{ $course->id }})"> {{-- Pass course ID to Alpine --}}
-        {{-- Max width container for central alignment --}}
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
-
-            <!-- Course Header Section -->
-            {{-- Enhanced shadow and explicit border for a cleaner card-like appearance --}}
             <div class="bg-white shadow-md border border-gray-200 rounded-lg overflow-hidden mb-6 sm:mb-8">
                 <div class="px-4 py-4 sm:px-6 sm:py-5">
-                    {{-- flex-wrap ensures items stack nicely on smaller screens --}}
                     <div class="flex items-center justify-between flex-wrap gap-3">
                         <div class="flex items-center space-x-3 ">
                             <div
@@ -24,9 +17,12 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-2 sm:space-x-4 rtl:space-x-reverse">
+                        <div class="flex items-center space-x-2 sm:space-x-4 rtl:space-x-reverse gap-3">
                             {{-- Star rating display --}}
-                            <div class="flex items-center bg-gray-50 rounded-lg px-3 py-2 flex-shrink-0">
+                            <div
+                                class="flex items-center bg-gray-50 rounded-lg px-3 py-2 flex-shrink-0 cursor-pointer"
+                                @click="showRatingModal = true"
+                            >
                                 <div class="flex text-yellow-400 text-sm" x-html="renderStars(courseRating)"></div>
                                 <span class="ml-2 rtl:ml-0 rtl:mr-2 text-sm text-gray-700 font-medium"
                                       x-text="`${courseRating} (${totalReviews})`"></span>
@@ -40,6 +36,19 @@
                     </div>
                 </div>
             </div>
+
+            @if(session('message'))
+                <div class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
+                    {{ session('message') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+
 
             <!-- Main Content Area - Grid Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -308,9 +317,14 @@
         <script>
             function courseData(courseId) {
                 return {
+                    showRatingModal: false,
+                    userRating: 0,
+                    userReview: '',
+
+
                     courseId: courseId,
-                    courseRating: 4.9,
-                    totalReviews: 2847,
+                    courseRating: {{$averageRating}},
+                    totalReviews: {{$totalReviews}},
                     completedEpisodes: 0,
                     totalEpisodes: 0,
                     totalDuration: "0h 0m",
@@ -486,9 +500,97 @@
 
                     currentEpisodeResources() {
                         return this.currentEpisode.resources || [];
+                    },
+
+                    submitReview() {
+                        console.log('Rating:', this.userRating, 'Review:', this.userReview);
+                        this.showRatingModal = false;
                     }
                 }
             }
         </script>
+        <!-- Rating Modal -->
+        <div
+            x-show="showRatingModal"
+            x-transition.opacity
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+        >
+            <div
+                @click.away="showRatingModal = false"
+                class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative rtl:text-right ltr:text-left"
+            >
+                <!-- Close button -->
+                <button
+                    @click="showRatingModal = false"
+                    class="absolute top-3 rtl:right-3 ltr:right-3 ltr:left-auto rtl:left-auto text-gray-400 hover:text-gray-600"
+                >
+                    ✕
+                </button>
+
+                <!-- Title -->
+                <h2 class="text-xl font-bold text-gray-900 mb-5 text-center">
+                    {{ __('Rate this Course') }}
+                </h2>
+
+                <!-- Form -->
+                <form method="POST" action="{{ route('courses.rate', $course) }}">
+                    @csrf
+                    <input type="hidden" name="rating" x-model="userRating">
+
+                    <!-- Star rating -->
+                    <div class="flex justify-center space-x-2 rtl:space-x-reverse mb-5" x-data="{ hoverRating: 0 }">
+                        <template x-for="i in 5" :key="i">
+                            <svg
+                                @mouseover="hoverRating = i"
+                                @mouseleave="hoverRating = 0"
+                                @click="userRating = i"
+                                :class="{
+                            'text-yellow-400 scale-110': i <= (hoverRating || userRating),
+                            'text-gray-300': i > (hoverRating || userRating)
+                        }"
+                                class="w-10 h-10 cursor-pointer transition-all duration-150"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1
+                        1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385
+                        2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755
+                        1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175
+                        0l-3.385 2.46c-.784.57-1.838-.196-1.539-1.118l1.287-3.974a1
+                        1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1
+                        1 0 00.95-.69l1.286-3.974z"/>
+                            </svg>
+                        </template>
+                    </div>
+
+                    <!-- Textarea -->
+                    <textarea
+                        name="comment"
+                        x-model="userReview"
+                        rows="5"
+                        class="w-full border border-gray-300 rounded-xl p-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:border-primary-orange transition-colors"
+                        placeholder="{{ __('Write your feedback...') }}"
+                    ></textarea>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-end space-x-3 rtl:space-x-reverse mt-6 gap-3">
+                        <button
+                            type="button"
+                            @click="showRatingModal = false"
+                            class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+                        >
+                            {{ __('Cancel') }}
+                        </button>
+                        <button
+                            type="submit"
+                            class="px-4 py-2 rounded-lg bg-primary-orange text-white hover:bg-orange-700 transition"
+                        >
+                            {{ __('Submit') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 @endsection

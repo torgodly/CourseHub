@@ -34,6 +34,7 @@ class User extends Authenticatable implements Wallet, Customer, FilamentUser
             default => false,
         };
     }
+
     protected $appends = ['avatar_url'];
 
     //is_admin
@@ -113,7 +114,9 @@ class User extends Authenticatable implements Wallet, Customer, FilamentUser
 
     public function ratedCourses()
     {
-        return $this->belongsToMany(Course::class, 'course_user_ratings')->withPivot('rating')->withTimestamps();
+        return $this->belongsToMany(Course::class, 'course_user_ratings')
+            ->withPivot('rating', 'comment')
+            ->withTimestamps();
     }
 
 

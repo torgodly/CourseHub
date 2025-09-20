@@ -110,8 +110,12 @@ class CourseController extends Controller
         ];
         $episodes = collect([$trailer])->merge($episodes)->sortBy('number')->values()->all();
 
-//        dd($episodes);
-        return view('courses.show', compact('course', 'episodes'));
+        //get avg rating
+        $averageRating = $course->ratings()->avg('course_user_ratings.rating');
+        $averageRating = round($averageRating, 1);
+        //number of ratings
+        $totalReviews = $course->ratings()->count();
+        return view('courses.show', compact('course', 'episodes', 'averageRating', 'totalReviews'));
     }
 
     /**
@@ -191,14 +195,28 @@ class CourseController extends Controller
      */
     public function rate(Request $request, Course $course)
     {
+
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
         ]);
 
         $user = auth()->user();
 
+        if (!$user) {
+            return redirect()->back()->with(['error' => __('You must be logged in to rate a course.')]);
+        }
+        //if user has not paid
+        if (!$user->paid($course)) {
+            return redirect()->back()->with(['error' => __('You must purchase the course before rating.')]);
+        }
+
+        // Use syncWithoutDetaching including comment
         $user->ratedCourses()->syncWithoutDetaching([
-            $course->id => ['rating' => $request->rating],
+            $course->id => [
+                'rating' => $request->rating,
+                'comment' => $request->comment, // add comment
+            ],
         ]);
         flash()->success(__('Course rated successfully.'));
         return redirect()->back()->with('message', __('Course rated successfully.'));

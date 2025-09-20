@@ -197,5 +197,12 @@
     "Search": "بحث",
     "Clear Filter": "مسح الفلتر",
     "Filters": "الفلاتر",
-    "Trailer": "المقطع الدعائي"
+    "Trailer": "المقطع الدعائي",
+    "Rate this Course": "قيم هذه الدورة",
+    "Write your feedback...": "اكتب ملاحظاتك...",
+    "Submit": "إرسال",
+    "You must purchase the course before rating.": "يجب عليك شراء الدورة قبل التقييم.",
+    "You must be logged in to rate a course.": "يجب تسجيل الدخول لتقييم دورة.",
+    "You have purchased this course successfully!": "لقد قمت بشراء هذه الدورة بنجاح!",
+    "Course rated successfully.": "تم تقييم الدورة بنجاح."
  }
