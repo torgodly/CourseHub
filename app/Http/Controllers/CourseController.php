@@ -36,9 +36,7 @@ class CourseController extends Controller
             case 'popular':
                 $query = $query->withCount('enrollments')->orderBy('enrollments_count', 'desc');
                 break;
-            case 'specialties':
-                $query = $query->whereNotNull('level'); // example condition
-                break;
+
             case 'all':
             default:
                 // no extra filtering
