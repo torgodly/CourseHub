@@ -11,7 +11,7 @@
             </p>
         </div>
         {{-- Tabs --}}
-        <x-course-tabs :active="$active"/>
+        <x-course-tabs :active="$active" :tags="$tags"/>
         {{-- Filters --}}
         {{-- <x-course-filters /> --}}
         {{-- Courses Grid --}}

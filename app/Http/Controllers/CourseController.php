@@ -8,6 +8,7 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use FFMpeg\FFProbe;
 use getID3;
 use Illuminate\Http\Request;
+use Spatie\Tags\Tag;
 
 class CourseController extends Controller
 {
@@ -16,12 +17,17 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
+        $tags = Tag::all();
         $tab = $request->get('tab', 'all'); // default: all
+        $tag = $request->get('tag');
         $search = $request->get('search');
         $query = Course::query()->with('trainer')->orderBy('created_at', 'desc');
         if ($search) {
             $query->where('title', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%');
+        }
+        if ($tag) {
+            $query->withAnyTags([$tag]);
         }
         switch ($tab) {
             case 'new':
@@ -44,6 +50,7 @@ class CourseController extends Controller
         return view('courses.index', [
             'courses' => $courses,
             'active' => $tab,
+            'tags' => $tags,
         ]);
     }
 
