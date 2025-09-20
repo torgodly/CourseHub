@@ -47,12 +47,8 @@
             </h2>
 
             {{-- Course Filter/Sort Links --}}
-            <ul class="flex flex-wrap gap-x-4 sm:gap-x-6 py-3 text-base sm:text-xl text-[#333] mb-6">
-                {{-- flex-wrap to allow items to wrap, increased gap for better spacing, adjusted text size --}}
-                <li><a href="#" class="hover:text-primary-orange transition-colors">{{ __('Latest Courses -') }}</a></li>
-                <li><a href="#" class="hover:text-primary-orange transition-colors">{{ __('Best Sellers -') }}</a></li>
-                <li><a href="#" class="hover:text-primary-orange transition-colors">{{ __('Free Courses') }}</a></li>
-            </ul>
+            <x-course-tabs :active="$tab" :tags="$tags"/>
+
 
             {{-- Courses Grid --}}
             {{-- This part is already very good for responsiveness due to your existing grid classes --}}

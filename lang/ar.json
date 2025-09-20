@@ -210,5 +210,6 @@
     "Overall Rating":" التقييم العام",
     "reviews": "مراجعات",
     "{1} :count review|[2,*] :count reviews": "{1} :count مراجعة|[2,*] :count مراجعات",
-    "Write a Review": "اكتب مراجعة"
+    "Write a Review": "اكتب مراجعة",
+    "No resources available for this episode.":" لا توجد موارد متاحة لهذه الحلقة."
  }
